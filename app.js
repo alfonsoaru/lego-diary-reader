@@ -171,11 +171,28 @@ async function parseTransactionForDiaryEntry(transaction, signatureInfo) {
 }
 
 async function createSimulatedDiaryEntry(transaction, signatureInfo, ipfsHash) {
-    // For demo, create diary entries based on transaction timestamp
     const timestamp = signatureInfo.blockTime * 1000;
     const date = new Date(timestamp);
+    const signature = signatureInfo.signature;
     
-    // Simulate different diary entries
+    // Try to get AI-generated entry from API first
+    try {
+        const response = await fetch(`http://localhost:3000/diary/${signature}`);
+        if (response.ok) {
+            const apiEntry = await response.json();
+            return {
+                signature: signature,
+                content: apiEntry.content,
+                timestamp: date.toISOString(),
+                wallet: apiEntry.wallet,
+                ipfsHash: apiEntry.ipfsHash || ipfsHash || ('Qm' + signature.slice(0, 44))
+            };
+        }
+    } catch (error) {
+        console.log('API call failed, using fallback:', error);
+    }
+    
+    // Fallback to enhanced static entries if API is down
     const demoEntries = [
         "Today I discovered an amazing new technique for creating smooth curves with standard LEGO bricks! The secret is in the angle and patience - each piece placed just right creates this incredible flowing effect.",
         "Found the most beautiful transparent blue pieces at the store today and immediately envisioned a stunning waterfall for my medieval castle. Sometimes the perfect piece just calls out to you!",
@@ -410,6 +427,9 @@ async function sendLegoForDiary() {
         console.log('LEGO diary request transaction:', signature);
         showStatus('1000 LEGO sent! Your diary entry is being generated...', 'connected');
         
+        // Generate new diary entry with AI
+        await generatePersonalizedDiaryEntry(signature, wallet.toString());
+        
         // Refresh balances and diary entries after a short delay
         setTimeout(() => {
             loadBalances();
@@ -422,6 +442,31 @@ async function sendLegoForDiary() {
     } finally {
         sendLegoBtn.disabled = false;
         sendLegoBtn.textContent = 'Send 1,000 LEGO for Diary Entry';
+    }
+}
+
+async function generatePersonalizedDiaryEntry(signature, wallet) {
+    try {
+        const response = await fetch('http://localhost:3000/generate-diary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ signature, wallet })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            console.log('✅ New diary entry generated:', result.entry.content);
+            showStatus('🎉 New personalized diary entry created!', 'connected');
+        } else {
+            console.error('❌ Diary generation failed');
+        }
+        
+    } catch (error) {
+        console.error('API call failed:', error);
+        // Fallback to existing system if API is down
     }
 }
 
