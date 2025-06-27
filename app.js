@@ -6,16 +6,27 @@ let connection = null;
 const SOLANA_RPC = 'https://api.devnet.solana.com';
 connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
 
-// Message service account that receives LEGO tokens
+// Token addresses
+const USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
+const LEGO_MINT = '6Pc8qwhy99qZca23RqY92DbcLQxweUwxWPEKpb9psbAi';
+const USDC_EXCHANGE_ACCOUNT = 'AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d';
 const MESSAGE_SERVICE_ACCOUNT = '4rBjRyfSNWGbbCNcTzEyrJUNxUj5im1dGCgKMta93R3j';
 
 // DOM elements
 const connectBtn = document.getElementById('connectBtn');
 const status = document.getElementById('status');
 const diaryEntries = document.getElementById('diaryEntries');
+const tokenActions = document.getElementById('tokenActions');
+const swapBtn = document.getElementById('swapBtn');
+const sendLegoBtn = document.getElementById('sendLegoBtn');
+const usdcAmountInput = document.getElementById('usdcAmount');
+const usdcBalanceSpan = document.getElementById('usdcBalance');
+const legoBalanceSpan = document.getElementById('legoBalance');
 
 // Event listeners
 connectBtn.addEventListener('click', connectWallet);
+swapBtn.addEventListener('click', swapUSDCToLEGO);
+sendLegoBtn.addEventListener('click', sendLegoForDiary);
 
 async function connectWallet() {
     try {
@@ -49,7 +60,11 @@ async function connectWallet() {
         showStatus(`Connected: ${wallet.toString().substring(0, 8)}...${wallet.toString().slice(-8)}`, 'connected');
         connectBtn.textContent = 'Connected ✓';
         
-        // Start loading diary entries
+        // Show token actions
+        tokenActions.style.display = 'block';
+        
+        // Load balances and diary entries
+        await loadBalances();
         await loadDiaryEntries();
         
     } catch (error) {
@@ -233,6 +248,181 @@ function showStatus(message, type) {
     status.textContent = message;
     status.className = `status ${type}`;
     status.style.display = 'block';
+}
+
+async function loadBalances() {
+    try {
+        // Get user's token accounts
+        const usdcMint = new solanaWeb3.PublicKey(USDC_MINT);
+        const legoMint = new solanaWeb3.PublicKey(LEGO_MINT);
+        
+        // Calculate associated token accounts
+        const usdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
+            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+        );
+        
+        const legoAccount = await solanaWeb3.PublicKey.findProgramAddress(
+            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), legoMint.toBuffer()],
+            new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+        );
+        
+        // Get balances
+        let usdcBalance = 0;
+        let legoBalance = 0;
+        
+        try {
+            const usdcBalanceInfo = await connection.getTokenAccountBalance(usdcAccount[0]);
+            usdcBalance = parseFloat(usdcBalanceInfo.value.uiAmount || 0);
+        } catch (error) {
+            console.log('USDC account not found');
+        }
+        
+        try {
+            const legoBalanceInfo = await connection.getTokenAccountBalance(legoAccount[0]);
+            legoBalance = parseFloat(legoBalanceInfo.value.uiAmount || 0);
+        } catch (error) {
+            console.log('LEGO account not found');
+        }
+        
+        // Update UI
+        usdcBalanceSpan.textContent = `USDC: $${usdcBalance.toFixed(2)}`;
+        legoBalanceSpan.textContent = `LEGO: ${legoBalance.toLocaleString()}`;
+        
+        // Enable/disable buttons based on balances
+        sendLegoBtn.disabled = legoBalance < 1000;
+        
+    } catch (error) {
+        console.error('Failed to load balances:', error);
+        usdcBalanceSpan.textContent = 'USDC: Error';
+        legoBalanceSpan.textContent = 'LEGO: Error';
+    }
+}
+
+async function swapUSDCToLEGO() {
+    try {
+        const usdcAmount = parseFloat(usdcAmountInput.value);
+        
+        if (!usdcAmount || usdcAmount < 0.10) {
+            showError('Please enter at least $0.10 USDC');
+            return;
+        }
+        
+        swapBtn.disabled = true;
+        swapBtn.textContent = 'Swapping...';
+        
+        // Create transaction to send USDC to exchange account
+        const usdcMint = new solanaWeb3.PublicKey(USDC_MINT);
+        const exchangeAccount = new solanaWeb3.PublicKey(USDC_EXCHANGE_ACCOUNT);
+        
+        // Get user's USDC account
+        const userUsdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
+            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+        );
+        
+        // Get exchange USDC account
+        const exchangeUsdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
+            [exchangeAccount.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+        );
+        
+        // Create transfer instruction using Phantom's transaction builder
+        const transaction = new solanaWeb3.Transaction();
+        
+        const transferInstruction = new solanaWeb3.TransactionInstruction({
+            keys: [
+                { pubkey: userUsdcAccount[0], isSigner: false, isWritable: true },
+                { pubkey: exchangeUsdcAccount[0], isSigner: false, isWritable: true },
+                { pubkey: wallet, isSigner: true, isWritable: false },
+            ],
+            programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
+            data: Buffer.from([
+                3, // Transfer instruction
+                ...new Uint8Array(new BigUint64Array([BigInt(Math.floor(usdcAmount * 1000000))]).buffer) // Amount in smallest units
+            ])
+        });
+        
+        transaction.add(transferInstruction);
+        transaction.feePayer = wallet;
+        transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+        
+        // Sign and send transaction
+        const signedTransaction = await window.solana.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        await connection.confirmTransaction(signature);
+        
+        console.log('USDC swap transaction:', signature);
+        showStatus(`Swapped $${usdcAmount} USDC! LEGO tokens incoming...`, 'connected');
+        
+        // Refresh balances after a short delay
+        setTimeout(loadBalances, 3000);
+        
+    } catch (error) {
+        console.error('Swap failed:', error);
+        showError('Swap failed: ' + error.message);
+    } finally {
+        swapBtn.disabled = false;
+        swapBtn.textContent = 'Swap USDC → LEGO';
+    }
+}
+
+async function sendLegoForDiary() {
+    try {
+        sendLegoBtn.disabled = true;
+        sendLegoBtn.textContent = 'Sending...';
+        
+        // Create transaction to send 1000 LEGO tokens to message service
+        const legoMint = new solanaWeb3.PublicKey(LEGO_MINT);
+        const messageService = new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT);
+        
+        // Get user's LEGO account
+        const userLegoAccount = await solanaWeb3.PublicKey.findProgramAddress(
+            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), legoMint.toBuffer()],
+            new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
+        );
+        
+        // Create transfer instruction
+        const transaction = new solanaWeb3.Transaction();
+        
+        const transferInstruction = new solanaWeb3.TransactionInstruction({
+            keys: [
+                { pubkey: userLegoAccount[0], isSigner: false, isWritable: true },
+                { pubkey: messageService, isSigner: false, isWritable: true },
+                { pubkey: wallet, isSigner: true, isWritable: false },
+            ],
+            programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
+            data: Buffer.from([
+                3, // Transfer instruction
+                ...new Uint8Array(new BigUint64Array([BigInt(1000 * 1000000000)]).buffer) // 1000 LEGO tokens
+            ])
+        });
+        
+        transaction.add(transferInstruction);
+        transaction.feePayer = wallet;
+        transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+        
+        // Sign and send transaction
+        const signedTransaction = await window.solana.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        await connection.confirmTransaction(signature);
+        
+        console.log('LEGO diary request transaction:', signature);
+        showStatus('1000 LEGO sent! Your diary entry is being generated...', 'connected');
+        
+        // Refresh balances and diary entries after a short delay
+        setTimeout(() => {
+            loadBalances();
+            loadDiaryEntries();
+        }, 5000);
+        
+    } catch (error) {
+        console.error('Send LEGO failed:', error);
+        showError('Send LEGO failed: ' + error.message);
+    } finally {
+        sendLegoBtn.disabled = false;
+        sendLegoBtn.textContent = 'Send 1,000 LEGO for Diary Entry';
+    }
 }
 
 function showError(message) {

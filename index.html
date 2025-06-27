@@ -156,6 +156,87 @@
             text-decoration: underline;
         }
         
+        .token-actions {
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .action-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #ff6b35;
+        }
+        
+        .action-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .action-section h3 {
+            color: #ff6b35;
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+        
+        .action-section p {
+            color: #666;
+            margin: 0 0 15px 0;
+        }
+        
+        .action-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .action-controls input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            min-width: 150px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .balance-display {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .balance-display span {
+            padding: 8px 12px;
+            background: #e9ecef;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -178,6 +259,30 @@
             <div id="status" class="status" style="display: none;"></div>
         </div>
         
+        <!-- Token Actions Section -->
+        <div id="tokenActions" class="token-actions" style="display: none;">
+            <div class="action-section">
+                <h3>💰 Get LEGO Tokens</h3>
+                <p>Exchange USDC for LEGO tokens (Rate: $0.10 USDC = 1,000 LEGO)</p>
+                <div class="action-controls">
+                    <input type="number" id="usdcAmount" placeholder="USDC amount (min 0.10)" min="0.10" step="0.01" />
+                    <button id="swapBtn" class="action-btn">Swap USDC → LEGO</button>
+                </div>
+                <div class="balance-display">
+                    <span id="usdcBalance">USDC: Loading...</span>
+                    <span id="legoBalance">LEGO: Loading...</span>
+                </div>
+            </div>
+            
+            <div class="action-section">
+                <h3>📝 Get New Diary Entry</h3>
+                <p>Send 1,000 LEGO tokens to receive a personalized diary entry</p>
+                <div class="action-controls">
+                    <button id="sendLegoBtn" class="action-btn">Send 1,000 LEGO for Diary Entry</button>
+                </div>
+            </div>
+        </div>
+
         <div id="diaryEntries" class="diary-entries"></div>
         
         <div class="footer">
