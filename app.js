@@ -339,7 +339,7 @@ async function swapUSDCToLEGO() {
             programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
             data: new Uint8Array([
                 3, // Transfer instruction
-                ...new Uint8Array(new BigUint64Array([BigInt(Math.floor(usdcAmount * 1000000))]).buffer) // Amount in smallest units
+                ...Array.from(new Uint8Array(new BigUint64Array([BigInt(Math.floor(usdcAmount * 1000000))]).buffer)) // Amount in smallest units
             ])
         });
         
@@ -394,7 +394,7 @@ async function sendLegoForDiary() {
             programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
             data: new Uint8Array([
                 3, // Transfer instruction
-                ...new Uint8Array(new BigUint64Array([BigInt(1000 * 1000000000)]).buffer) // 1000 LEGO tokens
+                ...Array.from(new Uint8Array(new BigUint64Array([BigInt(1000 * 1000000000)]).buffer)) // 1000 LEGO tokens
             ])
         });
         
