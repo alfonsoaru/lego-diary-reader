@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phantom Test</title>
+</head>
+<body>
+    <h1>Phantom Wallet Test</h1>
+    <button onclick="testPhantom()">Test Phantom</button>
+    <div id="result"></div>
+    
+    <script>
+        function testPhantom() {
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <p>window.solana: ${window.solana}</p>
+                <p>window.solana?.isPhantom: ${window.solana?.isPhantom}</p>
+                <p>Protocol: ${window.location.protocol}</p>
+            `;
+        }
+        
+        // Auto-test on load
+        setTimeout(testPhantom, 1000);
+    </script>
+</body>
+</html>
