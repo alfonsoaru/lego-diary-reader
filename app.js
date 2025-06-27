@@ -258,12 +258,12 @@ async function loadBalances() {
         
         // Calculate associated token accounts
         const usdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
-            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            [wallet.toBytes(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBytes(), usdcMint.toBytes()],
             new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
         );
         
         const legoAccount = await solanaWeb3.PublicKey.findProgramAddress(
-            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), legoMint.toBuffer()],
+            [wallet.toBytes(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBytes(), legoMint.toBytes()],
             new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
         );
         
@@ -317,13 +317,13 @@ async function swapUSDCToLEGO() {
         
         // Get user's USDC account
         const userUsdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
-            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            [wallet.toBytes(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBytes(), usdcMint.toBytes()],
             new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
         );
         
         // Get exchange USDC account
         const exchangeUsdcAccount = await solanaWeb3.PublicKey.findProgramAddress(
-            [exchangeAccount.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), usdcMint.toBuffer()],
+            [exchangeAccount.toBytes(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBytes(), usdcMint.toBytes()],
             new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
         );
         
@@ -337,7 +337,7 @@ async function swapUSDCToLEGO() {
                 { pubkey: wallet, isSigner: true, isWritable: false },
             ],
             programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
-            data: Buffer.from([
+            data: new Uint8Array([
                 3, // Transfer instruction
                 ...new Uint8Array(new BigUint64Array([BigInt(Math.floor(usdcAmount * 1000000))]).buffer) // Amount in smallest units
             ])
@@ -378,7 +378,7 @@ async function sendLegoForDiary() {
         
         // Get user's LEGO account
         const userLegoAccount = await solanaWeb3.PublicKey.findProgramAddress(
-            [wallet.toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), legoMint.toBuffer()],
+            [wallet.toBytes(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBytes(), legoMint.toBytes()],
             new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL')
         );
         
@@ -392,7 +392,7 @@ async function sendLegoForDiary() {
                 { pubkey: wallet, isSigner: true, isWritable: false },
             ],
             programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
-            data: Buffer.from([
+            data: new Uint8Array([
                 3, // Transfer instruction
                 ...new Uint8Array(new BigUint64Array([BigInt(1000 * 1000000000)]).buffer) // 1000 LEGO tokens
             ])
