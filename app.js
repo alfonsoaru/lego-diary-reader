@@ -408,14 +408,18 @@ function displayDiaryEntries(entries) {
                         </div>
                         <img src="${imageUrl}" alt="AI Generated LEGO Scene" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;" 
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <div style="display: none; padding: 20px; background: #f5f5f5; border-radius: 10px; text-align: center; color: #666;">
-                            ❌ Image failed to load<br>
-                            <small>Primary URL: ${imageUrl}</small>
-                            ${entry.image.data && imageUrl !== entry.image.data ? `<br><small>Fallback: ${entry.image.data}</small>` : ''}
+                        <div style="display: none; width: 100%; max-width: 400px; height: 200px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; text-align: center; border: 3px dashed #fff;">
+                            🧱<br><small style="font-size: 14px; margin-top: 10px;">Image Loading...</small>
                         </div>
                         <div class="image-prompt" style="font-size: 0.9em; color: #666; margin-bottom: 15px;">🎨 ${entry.image.prompt || 'AI Generated LEGO Scene'}</div>
                     </div>
-                ` : ''}
+                ` : `
+                    <div class="diary-image">
+                        <div style="width: 100%; max-width: 400px; height: 200px; background: linear-gradient(45deg, #ccc, #999); border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; text-align: center; border: 3px dashed #666;">
+                            🧱<br><small style="font-size: 14px; margin-top: 10px;">No Image</small>
+                        </div>
+                    </div>
+                `}
                 <div class="diary-content">
                     📔 Dear Diary,<br><br>
                     ${entry.content}
