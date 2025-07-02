@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 Enhanced LEGO Diary Reader</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #ff6b35;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        
+        .mode-info {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .diary-entries {
+            margin-top: 30px;
+        }
+        
+        .diary-entry {
+            background: #fff;
+            border: 2px solid #ff6b35;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .diary-date {
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .diary-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .diary-image {
+            margin: 15px 0;
+        }
+        
+        .diary-image img {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .image-source {
+            font-size: 0.9em;
+            color: #333;
+            margin-bottom: 10px;
+            background: #f0f8ff;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .diary-meta {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .ipfs-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        
+        .ipfs-link:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .nav-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-links a {
+            color: #ff6b35;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 8px 16px;
+            border: 2px solid #ff6b35;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .nav-links a:hover {
+            background: #ff6b35;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧱 Enhanced LEGO Diary Reader 📔</h1>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">🔙 Original Reader</a>
+            <a href="test-github-pages-images.html">🧪 Image Test</a>
+        </div>
+        
+        <div class="mode-info">
+            <strong>✨ Enhanced Mode:</strong> Showing existing diary entries with GitHub Pages images!<br>
+            <small>📊 48 diary entries linked with 38 unique LEGO images from GitHub Pages</small>
+        </div>
+
+        <div id="diaryEntries" class="diary-entries">
+            <div class="loading">🔍 Loading enhanced diary entries...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadEnhancedEntries() {
+            try {
+                console.log('📚 Loading enhanced diary entries...');
+                
+                // Load the enhanced entries JSON file
+                const response = await fetch('enhanced-entries.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const entries = await response.json();
+                console.log(`✅ Loaded ${entries.length} enhanced entries`);
+                
+                displayEnhancedEntries(entries);
+                
+            } catch (error) {
+                console.error('❌ Error loading enhanced entries:', error);
+                document.getElementById('diaryEntries').innerHTML = `
+                    <div class="loading">
+                        ❌ Error loading enhanced entries: ${error.message}<br>
+                        <small>Make sure enhanced-entries.json exists and is accessible</small>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayEnhancedEntries(entries) {
+            const container = document.getElementById('diaryEntries');
+            
+            if (entries.length === 0) {
+                container.innerHTML = '<div class="loading">📔 No enhanced entries found</div>';
+                return;
+            }
+            
+            // Sort by timestamp (newest first)
+            entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            let html = `<h2>📖 Enhanced LEGO Diary Entries (${entries.length})</h2>`;
+            
+            entries.forEach((entry, index) => {
+                const hasImage = entry.image && entry.image.data;
+                
+                html += `
+                    <div class="diary-entry">
+                        <div class="diary-date">📅 ${entry.date} ${entry.time ? `🕐 ${entry.time}` : ''}</div>
+                        
+                        ${hasImage ? `
+                            <div class="diary-image">
+                                <div class="image-source">
+                                    <strong>🖼️ Image Source:</strong> GitHub Pages
+                                    <br><strong>IPFS Hash:</strong> ${entry.image.ipfsHash}
+                                </div>
+                                <img src="${entry.image.data}" alt="AI Generated LEGO Scene" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div style="display: none; padding: 20px; background: #f5f5f5; border-radius: 10px; text-align: center; color: #666;">
+                                    ❌ Image failed to load<br>
+                                    <small>URL: ${entry.image.data}</small>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="diary-content">
+                            📔 ${entry.content}
+                        </div>
+                        
+                        <div class="diary-meta">
+                            📦 <a href="https://gateway.pinata.cloud/ipfs/${entry.ipfsHash}" target="_blank" class="ipfs-link">
+                                View on IPFS: ${entry.ipfsHash.substring(0, 20)}...
+                            </a><br>
+                            ${hasImage ? `
+                                🖼️ <a href="${entry.image.data}" target="_blank" class="ipfs-link">
+                                    View Image: ${entry.image.ipfsHash.substring(0, 20)}...
+                                </a><br>
+                            ` : ''}
+                            🆔 <span style="color: #666;">Entry ID: ${entry.signature.substring(0, 20)}...</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log(`✅ Displayed ${entries.length} enhanced diary entries`);
+        }
+        
+        // Load enhanced entries when page loads
+        window.addEventListener('load', loadEnhancedEntries);
+    </script>
+</body>
+</html>
