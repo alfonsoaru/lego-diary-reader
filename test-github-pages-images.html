@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 GitHub Pages Image Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-image { margin: 20px 0; padding: 20px; border: 2px solid #ff6b35; border-radius: 10px; }
+        .success { border-color: green; background: #e8f5e8; }
+        .error { border-color: red; background: #ffe8e8; }
+        img { max-width: 400px; height: 200px; object-fit: cover; border-radius: 8px; }
+        .url { font-family: monospace; font-size: 0.9em; background: #f5f5f5; padding: 5px; border-radius: 3px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <h1>🧱 GitHub Pages Image Gateway Test</h1>
+    
+    <p>Testing if our 38 uploaded LEGO images are accessible via GitHub Pages...</p>
+    
+    <div class="test-image">
+        <h3>🔸 Test Image 1: QmNN6geeiFzMoWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZL</h3>
+        <div class="url">https://alfonsoaru.github.io/lego-diary-reader/public/images/QmNN6geeiFzMoWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZL.png</div>
+        <img src="https://alfonsoaru.github.io/lego-diary-reader/public/images/QmNN6geeiFzMoWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZL.png" 
+             alt="LEGO Building Scene" 
+             onload="this.parentElement.classList.add('success'); this.parentElement.querySelector('.status').textContent = '✅ Loading from GitHub Pages!'"
+             onerror="this.parentElement.classList.add('error'); this.parentElement.querySelector('.status').textContent = '❌ Failed to load'">
+        <div class="status">🔄 Loading...</div>
+    </div>
+
+    <div class="test-image">
+        <h3>🔸 Test Image 2: QmPq88kv2LLEdadwCVg6v5SKftw6iSieXZ5CJ5XDCC83hR</h3>
+        <div class="url">https://alfonsoaru.github.io/lego-diary-reader/public/images/QmPq88kv2LLEdadwCVg6v5SKftw6iSieXZ5CJ5XDCC83hR.png</div>
+        <img src="https://alfonsoaru.github.io/lego-diary-reader/public/images/QmPq88kv2LLEdadwCVg6v5SKftw6iSieXZ5CJ5XDCC83hR.png" 
+             alt="LEGO Collection Display" 
+             onload="this.parentElement.classList.add('success'); this.parentElement.querySelector('.status').textContent = '✅ Loading from GitHub Pages!'"
+             onerror="this.parentElement.classList.add('error'); this.parentElement.querySelector('.status').textContent = '❌ Failed to load'">
+        <div class="status">🔄 Loading...</div>
+    </div>
+
+    <div class="test-image">
+        <h3>🔸 Test Image 3: QmWNvQrwYDHAmgddHxepgTUR8gpkufbKWifpht3nqequTE</h3>
+        <div class="url">https://alfonsoaru.github.io/lego-diary-reader/public/images/QmWNvQrwYDHAmgddHxepgTUR8gpkufbKWifpht3nqequTE.png</div>
+        <img src="https://alfonsoaru.github.io/lego-diary-reader/public/images/QmWNvQrwYDHAmgddHxepgTUR8gpkufbKWifpht3nqequTE.png" 
+             alt="LEGO Castle Creation" 
+             onload="this.parentElement.classList.add('success'); this.parentElement.querySelector('.status').textContent = '✅ Loading from GitHub Pages!'"
+             onerror="this.parentElement.classList.add('error'); this.parentElement.querySelector('.status').textContent = '❌ Failed to load'">
+        <div class="status">🔄 Loading...</div>
+    </div>
+
+    <h2>📋 Next Steps to See Images in Diary Reader:</h2>
+    <ol>
+        <li><strong>Generate new diary entries</strong> using the unified LEGO service</li>
+        <li><strong>Send LEGO tokens</strong> to trigger AI image generation</li>
+        <li><strong>New entries will use GitHub Pages</strong> for image hosting automatically</li>
+    </ol>
+
+    <p><a href="index.html">← Back to Diary Reader</a></p>
+
+    <h2>🔗 Available Images (38 total):</h2>
+    <div id="imageList"></div>
+
+    <script>
+        // List all 38 available images
+        const imageHashes = [
+            'QmNN6geeiFzMoWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZL',
+            'QmNZEnpLPouTqwUkXHVz1yP4qGRhCUGczEpoUC7tkBLvPU',
+            'QmPq88kv2LLEdadwCVg6v5SKftw6iSieXZ5CJ5XDCC83hR',
+            'QmQrrJLqDuuUQgagebyiaGdFsuTNMz7LvaNqtMZoSTJNxo',
+            'QmQvtYXdDzUSz6w4Y15PKokZnrGqiJo7Hv2b7Sq5GhVVzL',
+            'QmRFrcs4ZoK3jZv8JcuRTEMsy9Z3cSQDCTaeX2fjLC8Dhw',
+            'QmSQ8DmCKZGDHn3zrTv8UjyyrYcCwgN6cS41XQzCFHWWLL',
+            'QmSsnhpsU72qwBqXC5Q9TLTJ43mvnxX2J1agvHWcg2y3iL',
+            'QmTz8ABKeATWddV5q7Zzu1w6ECGeYh4Np27upyhcuY2Hyu',
+            'QmU8LrmixYt1PfDNDzqRZMMrP4QxZCb5XxQfE8XiviY9Cs',
+            'QmUKHY9Wryo9AmfxhWQubZRBXzV3F7vz6ZEqsEXpnM81pY',
+            'QmUqDmMVpA1sH9X71gvP6dS7uNQVYN5yxroR5eEvGKAMfK',
+            'QmUqcogAZdBaQCUJaG8dcV9rTkn1PaqxVSuczwYWYRnjdc',
+            'QmVBDLgmGGt8tvp9iehUC2Qiqr7A1GtUDk9ZAJW4uKzBVV',
+            'QmVCE9DnXdhsfoG3cJYxLfrWu5bQWW2LZajVgZtQbqGXhW',
+            'QmVchW2gCEfPbefZsyCGuiM2ujw3E5L481hwC83vfd1KcP',
+            'QmWNvQrwYDHAmgddHxepgTUR8gpkufbKWifpht3nqequTE',
+            'QmWvo1qrC3mNF7K7749wLibp2SE9yTQv6JYfwJ2HoKVLgZ',
+            'QmWwRkRrswXCcEohXDh1F2zdYbU11sMpBhURdVJ6pbfeWz',
+            'QmXu6oHENCqhwFVnGeSGH1Ajte5N6pwL9S966cC7vUcNXb',
+            'QmY4PR2LgR9z9YtoBuRKPmd7vSXJHW2HfQaqLkiSMFKG1j',
+            'QmYKtXhQsSEmrSwp92ajRokmRTw4x3qk2ffoQYVpn54mE7',
+            'QmYbvZx4kMEszD3Xr11XZ2jtsqkVtoqa7xqE2RZjzUEgjp',
+            'QmYnVxE1kPnQpn4jFwgiuLpQV5N5vD7PNKnvx46ccwgJCg',
+            'QmZ7tdPf3j19EG4JBwmADRxMwbieSnxKL9jDA7HYBXSrGB',
+            'QmZWMUYEqo4Ve3u8TJUjVTAAXj1N7BTfrcwXt6R26hypZT',
+            'QmZuirCeooPzwKJ9PJmkiQfnxSpZNwDRfPvGAxqYNPZ85j',
+            'QmaUv4DE5SrmZWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZ',
+            'QmatzjSpf3wW7d4Qk6b43KSuVTdA1fZZR6qmjjg3g4UL1g',
+            'QmbEFU8hjLCjVCRQGWJteVwjHMSirrSmJvp2PQtuyrn1jK',
+            'QmbMxNy1HVd6cPJgnQUirPBapdb2k29nEZcXyXYzc8gLMb',
+            'QmbYcAWLLfSQPY4CTRJ5VWgZdA66WVeQrRWTEU9VQxQfCA',
+            'QmcWB3jcMiWaTM7jxaoKSG79byfoCaBhbwhHc7Ymeu82a1',
+            'Qmcd2MoR9uX23pqZcLXKoS3GKFjUsdWd6QLFc2BXm8Shdz',
+            'QmcszxWfMqdVuGAvQT4rvqxBhz8JsC2ATaqYk3F8xjFi1Y',
+            'QmdYC7m4kMXS35Z1Sq11VDrtE1wxagVccQSKfKSgU4tdZe',
+            'QmexvuagNT6aYdKdiSewAxPfg4ZTWCf9GQ4LbXLhufUQEz',
+            'QmfAJNvve1mFW5Zb2Airi6v6hQtP6yVTaU5xeNstuXCToc'
+        ];
+
+        const listContainer = document.getElementById('imageList');
+        imageHashes.forEach((hash, index) => {
+            const div = document.createElement('div');
+            div.style.cssText = 'margin: 5px 0; padding: 5px; background: #f9f9f9; border-radius: 3px;';
+            div.innerHTML = `
+                <strong>${index + 1}.</strong> 
+                <code>${hash}</code> 
+                <a href="https://alfonsoaru.github.io/lego-diary-reader/public/images/${hash}.png" target="_blank">View</a>
+            `;
+            listContainer.appendChild(div);
+        });
+    </script>
+</body>
+</html>
