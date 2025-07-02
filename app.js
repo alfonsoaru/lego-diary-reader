@@ -1,3 +1,6 @@
+// LEGO Diary Reader v4.0 - Full IPFS Integration + Native Access
+console.log('🧱 LEGO Diary Reader v4.0 - Full IPFS Integration + Native Access Loaded');
+
 // Global variables
 let wallet = null;
 let connection = null;
@@ -6,11 +9,11 @@ let connection = null;
 const SOLANA_RPC = 'https://api.devnet.solana.com';
 connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
 
-// Token addresses
-const USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
-const LEGO_MINT = '6Pc8qwhy99qZca23RqY92DbcLQxweUwxWPEKpb9psbAi';
-const USDC_EXCHANGE_ACCOUNT = 'AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d';
-const MESSAGE_SERVICE_ACCOUNT = '4rBjRyfSNWGbbCNcTzEyrJUNxUj5im1dGCgKMta93R3j';
+// Token addresses - using CONFIG from config.js
+const USDC_MINT = CONFIG.TOKENS.USDC_MINT;
+const LEGO_MINT = CONFIG.TOKENS.LEGO_MINT;
+const USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
+const MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
 
 // DOM elements
 const connectBtn = document.getElementById('connectBtn');
@@ -60,8 +63,9 @@ async function connectWallet() {
         showStatus(`Connected: ${wallet.toString().substring(0, 8)}...${wallet.toString().slice(-8)}`, 'connected');
         connectBtn.textContent = 'Connected ✓';
         
-        // Show token actions
+        // Show token actions and update UI with config values
         tokenActions.style.display = 'block';
+        updateUIWithConfig();
         
         // Load balances and diary entries
         await loadBalances();
@@ -86,7 +90,11 @@ async function loadDiaryEntries() {
         
         const entries = [];
         
-        for (const signatureInfo of signatures) {
+        // Process more transactions to find memo entries
+        const limitedSignatures = signatures.slice(0, 10);
+        console.log(`Processing ${limitedSignatures.length} transactions to find memo entries`);
+        
+        for (const signatureInfo of limitedSignatures) {
             try {
                 // Get full transaction details
                 const transaction = await connection.getTransaction(signatureInfo.signature, {
@@ -94,12 +102,20 @@ async function loadDiaryEntries() {
                     maxSupportedTransactionVersion: 0
                 });
                 
-                if (!transaction) continue;
+                if (!transaction) {
+                    console.log(`⚠️ No transaction data for ${signatureInfo.signature.slice(0, 8)}...`);
+                    continue;
+                }
+                
+                console.log(`🔍 Parsing transaction ${signatureInfo.signature.slice(0, 8)}...`);
                 
                 // Look for LEGO token transfers to message service
                 const diaryEntry = await parseTransactionForDiaryEntry(transaction, signatureInfo);
                 if (diaryEntry) {
+                    console.log(`✅ Found diary entry: ${diaryEntry.content.slice(0, 50)}...`);
                     entries.push(diaryEntry);
+                } else {
+                    console.log(`❌ No diary entry found in transaction`);
                 }
                 
             } catch (error) {
@@ -121,45 +137,88 @@ async function loadDiaryEntries() {
 
 async function parseTransactionForDiaryEntry(transaction, signatureInfo) {
     try {
-        // Check if this transaction sent LEGO tokens to the message service
-        const messageServicePubkey = new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT);
-        
-        // Look for token transfer in the transaction
+        // Look for transactions with memo instructions (service sending back to customer)
         const accountKeys = transaction.transaction.message.accountKeys;
         const instructions = transaction.transaction.message.instructions;
         
-        // Check if message service account is involved
-        let isMessageServiceTransaction = false;
-        for (const account of accountKeys) {
-            if (account.equals(messageServicePubkey)) {
-                isMessageServiceTransaction = true;
+        // Check for memo program instructions first
+        const MEMO_PROGRAM_ID = 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr';
+        let hasMemoInstruction = false;
+        
+        for (const instruction of instructions) {
+            const programId = accountKeys[instruction.programIdIndex];
+            if (programId.toString() === MEMO_PROGRAM_ID) {
+                hasMemoInstruction = true;
                 break;
             }
         }
         
-        if (!isMessageServiceTransaction) {
+        if (!hasMemoInstruction) {
+            console.log(`❌ Transaction ${signatureInfo.signature.slice(0, 8)}... has no memo instruction`);
             return null;
         }
         
-        // Look for log messages that might contain IPFS hashes
-        const logs = transaction.meta?.logMessages || [];
-        let ipfsHash = null;
-        
-        for (const log of logs) {
-            // Look for IPFS hash pattern (starts with Qm)
-            const ipfsMatch = log.match(/Qm[1-9A-HJ-NP-Za-km-z]{44}/);
-            if (ipfsMatch) {
-                ipfsHash = ipfsMatch[0];
+        // Check if this is a SOL transfer TO our wallet (service paying customer)
+        let isServiceToCustomer = false;
+        for (const instruction of instructions) {
+            const programId = accountKeys[instruction.programIdIndex];
+            // System program for SOL transfers
+            if (programId.toString() === '11111111111111111111111111111111') {
+                // This is a SOL transfer, check if it's TO our wallet
+                isServiceToCustomer = true;
                 break;
             }
         }
         
-        // For demo purposes, simulate finding diary entries based on transaction patterns
-        // In a real implementation, you'd parse the actual transaction data more carefully
-        if (isMessageServiceTransaction) {
-            // Create a simulated diary entry based on transaction
-            const simulatedEntry = await createSimulatedDiaryEntry(transaction, signatureInfo, ipfsHash);
-            return simulatedEntry;
+        if (!isServiceToCustomer) {
+            console.log(`❌ Transaction ${signatureInfo.signature.slice(0, 8)}... not a service-to-customer transaction`);
+            return null;
+        }
+        
+        console.log(`✅ Transaction ${signatureInfo.signature.slice(0, 8)}... is service sending memo to customer`);
+        console.log(`🔍 Starting memo parsing for transaction ${signatureInfo.signature.slice(0, 8)}...`);
+        
+        // Look for memo content in transaction logs (more reliable)
+        const logs = transaction.meta?.logMessages || [];
+        let ipfsHash = null;
+        let memoContent = null;
+        
+        console.log(`🔍 Checking ${logs.length} log messages for memo content...`);
+        
+        // Check logs for memo content first (this is more reliable)
+        for (const log of logs) {
+            if (log.includes('Memo (len')) {
+                console.log(`📝 Found memo log: ${log.substring(0, 100)}...`);
+                // Extract memo content from log: 'Memo (len X): "content"'
+                const memoMatch = log.match(/Memo \(len \d+\): "(.+)"/);
+                if (memoMatch) {
+                    memoContent = memoMatch[1].replace(/\\n/g, '\n'); // Handle escaped newlines
+                    console.log(`✅ Extracted memo content: ${memoContent.substring(0, 100)}...`);
+                    
+                    // Look for REAL IPFS hash patterns in memo (prioritize bafkrei over fake Qm)
+                    const realIpfsMatch = memoContent.match(/📔 IPFS: (bafkrei[a-z2-7]{52})/);
+                    const anyIpfsMatch = memoContent.match(/(Qm[1-9A-HJ-NP-Za-km-z]{44}|bafkrei[a-z2-7]{52})/);
+                    
+                    if (realIpfsMatch) {
+                        ipfsHash = realIpfsMatch[1]; // Use the real IPFS hash after "📔 IPFS:"
+                        console.log('🔍 Found REAL IPFS hash in memo:', ipfsHash);
+                    } else if (anyIpfsMatch) {
+                        ipfsHash = anyIpfsMatch[0]; // Fallback to any IPFS hash found
+                        console.log('🔍 Found fallback IPFS hash in memo:', ipfsHash);
+                    }
+                    
+                    if (ipfsHash) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        // Only return real diary entries with IPFS hashes
+        if (ipfsHash) {
+            // Try to get real diary entry from API
+            const realEntry = await createRealDiaryEntry(transaction, signatureInfo, ipfsHash, memoContent);
+            return realEntry; // This will be null if no real content found
         }
         
         return null;
@@ -170,7 +229,7 @@ async function parseTransactionForDiaryEntry(transaction, signatureInfo) {
     }
 }
 
-async function createSimulatedDiaryEntry(transaction, signatureInfo, ipfsHash) {
+async function createRealDiaryEntry(transaction, signatureInfo, ipfsHash, memoContent) {
     const timestamp = signatureInfo.blockTime * 1000;
     const date = new Date(timestamp);
     const signature = signatureInfo.signature;
@@ -180,44 +239,125 @@ async function createSimulatedDiaryEntry(transaction, signatureInfo, ipfsHash) {
         const response = await fetch(`http://localhost:3000/diary/${signature}`);
         if (response.ok) {
             const apiEntry = await response.json();
+            
+            // If API entry exists, try to get full content from IPFS cache
+            let fullContent = apiEntry.content;
+            let imageData = apiEntry.image;
+            
+            // Extract real IPFS hash from content if available
+            let realIpfsHash = apiEntry.ipfsHash;
+            const contentMatch = apiEntry.content.match(/IPFS: (Qm[a-zA-Z0-9]{44})/);
+            if (contentMatch) {
+                realIpfsHash = contentMatch[1];
+                console.log('🔍 Found real IPFS hash in content:', realIpfsHash);
+            }
+            
+            if (realIpfsHash && !imageData) {
+                try {
+                    console.log('🔍 Looking up IPFS content for:', realIpfsHash);
+                    const ipfsResponse = await fetch(`http://localhost:3000/ipfs/${realIpfsHash}`);
+                    if (ipfsResponse.ok) {
+                        const ipfsContent = await ipfsResponse.json();
+                        console.log('✅ IPFS content found:', ipfsContent);
+                        if (ipfsContent.content && ipfsContent.content.content) {
+                            fullContent = ipfsContent.content.content;
+                            console.log('📝 Updated content from IPFS');
+                        }
+                        if (ipfsContent.content && ipfsContent.content.image) {
+                            imageData = ipfsContent.content.image;
+                            // Convert local path to HTTP URL
+                            if (imageData.localPath) {
+                                const filename = imageData.localPath.split('/').pop();
+                                imageData.data = `http://localhost:3000/images/${filename}`;
+                                console.log('🖼️ Using local HTTP image:', imageData.data);
+                            } else {
+                                console.log('🖼️ Found image data:', imageData.data.substring(0, 50) + '...');
+                            }
+                        }
+                    } else {
+                        console.log('❌ IPFS lookup failed:', ipfsResponse.status);
+                    }
+                } catch (ipfsError) {
+                    console.log('❌ IPFS cache lookup failed:', ipfsError);
+                }
+            }
+            
             return {
                 signature: signature,
-                content: apiEntry.content,
+                content: fullContent,
+                image: imageData,
                 timestamp: date.toISOString(),
+                date: date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }),
+                time: apiEntry.time || date.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: true 
+                }),
                 wallet: apiEntry.wallet,
-                ipfsHash: apiEntry.ipfsHash || ipfsHash || ('Qm' + signature.slice(0, 44))
+                ipfsHash: ipfsHash
             };
         }
     } catch (error) {
-        console.log('API call failed, using fallback:', error);
+        console.log('API call failed, extracting from memo:', error);
     }
     
-    // Fallback to enhanced static entries if API is down
-    const demoEntries = [
-        "Today I discovered an amazing new technique for creating smooth curves with standard LEGO bricks! The secret is in the angle and patience - each piece placed just right creates this incredible flowing effect.",
-        "Found the most beautiful transparent blue pieces at the store today and immediately envisioned a stunning waterfall for my medieval castle. Sometimes the perfect piece just calls out to you!",
-        "Completed my most challenging build yet - a detailed spaceship with moving wings and hidden compartments. The satisfaction of seeing months of planning come together is absolutely incredible.",
-        "Organized my entire collection by color today and felt so inspired by all the possibilities laid out before me. There's something magical about seeing endless creative potential in neat, sorted rows.",
-        "Taught my neighbor's child how to build today and watched their eyes light up with the same passion I felt decades ago. Sharing the joy of LEGO with the next generation fills my heart."
-    ];
+    // Extract content from memo if API fails
+    if (memoContent && ipfsHash) {
+        // Extract preview content from memo (after the IPFS hash)
+        const parts = memoContent.split(' | ');
+        let previewContent = 'Diary entry available on IPFS';
+        
+        console.log(`🔍 Memo parts (${parts.length}):`, parts);
+        
+        if (parts.length > 2) {
+            // Skip the payment info and IPFS hash, get the actual content preview
+            previewContent = parts.slice(2).join(' | '); // Get everything after "💰10 LEGO→1 msgs | ipfs://hash | "
+            console.log(`✅ Using parts 2+: ${previewContent.substring(0, 100)}...`);
+        } else if (parts.length > 1) {
+            previewContent = parts[1]; // Fallback to second part
+            console.log(`✅ Using part 1: ${previewContent.substring(0, 100)}...`);
+        }
+        
+        // Clean up the preview content
+        if (previewContent.startsWith('📔 IPFS:')) {
+            // Extract just the text after the IPFS hash reference
+            const textMatch = previewContent.match(/📔 IPFS: [a-zA-Z0-9]+ - (.+)/);
+            if (textMatch) {
+                previewContent = textMatch[1];
+                console.log(`✅ Cleaned preview: ${previewContent.substring(0, 100)}...`);
+            }
+        }
+        
+        return {
+            signature: signature,
+            content: previewContent,
+            image: null,
+            timestamp: date.toISOString(),
+            date: date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            }),
+            time: date.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true 
+            }),
+            wallet: transaction.transaction.message.accountKeys[0].toString().slice(0, 8) + '...',
+            ipfsHash: ipfsHash
+        };
+    }
     
-    // Use transaction signature to determine which entry to show (for consistency)
-    const entryIndex = parseInt(signatureInfo.signature.substring(0, 2), 16) % demoEntries.length;
-    const content = demoEntries[entryIndex];
-    
-    return {
-        signature: signatureInfo.signature,
-        timestamp: timestamp,
-        date: date.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        }),
-        content: content,
-        ipfsHash: ipfsHash || `Qm${signatureInfo.signature.substring(0, 44)}`, // Simulate IPFS hash
-        blockTime: signatureInfo.blockTime
-    };
+    // No real content found
+    return null;
 }
 
 function displayDiaryEntries(entries) {
@@ -236,9 +376,46 @@ function displayDiaryEntries(entries) {
     let html = `<h2>📖 Your LEGO Diary Entries (${entries.length})</h2>`;
     
     entries.forEach((entry, index) => {
+        // Check if entry has image data
+        const hasImage = entry.image && (entry.image.data || entry.image.ipfsHash);
+        
+        // Determine the best image URL to use
+        let imageUrl = null;
+        let imageSource = 'none';
+        
+        if (hasImage) {
+            // Priority: GitHub Pages (for IPFS hashes) > Local > Original
+            if (entry.image.ipfsHash) {
+                imageUrl = getImageUrl(entry.image.ipfsHash);
+                imageSource = CONFIG.USE_GITHUB_PAGES ? 'GitHub Pages' : 'Local HTTP';
+            } else if (entry.image.githubPagesUrl) {
+                imageUrl = entry.image.githubPagesUrl;
+                imageSource = 'GitHub Pages (direct)';
+            } else if (entry.image.data) {
+                imageUrl = entry.image.data;
+                imageSource = 'Original URL';
+            }
+        }
+        
         html += `
             <div class="diary-entry">
-                <div class="diary-date">📅 ${entry.date}</div>
+                <div class="diary-date">📅 ${entry.date} ${entry.time ? `🕐 ${entry.time}` : ''}</div>
+                ${hasImage && imageUrl ? `
+                    <div class="diary-image">
+                        <div style="font-size: 0.9em; color: #333; margin-bottom: 10px;">
+                            <strong>🖼️ Image Source:</strong> ${imageSource}
+                            ${entry.image.ipfsHash ? `<br><strong>IPFS Hash:</strong> ${entry.image.ipfsHash}` : ''}
+                        </div>
+                        <img src="${imageUrl}" alt="AI Generated LEGO Scene" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display: none; padding: 20px; background: #f5f5f5; border-radius: 10px; text-align: center; color: #666;">
+                            ❌ Image failed to load<br>
+                            <small>Primary URL: ${imageUrl}</small>
+                            ${entry.image.data && imageUrl !== entry.image.data ? `<br><small>Fallback: ${entry.image.data}</small>` : ''}
+                        </div>
+                        <div class="image-prompt" style="font-size: 0.9em; color: #666; margin-bottom: 15px;">🎨 ${entry.image.prompt || 'AI Generated LEGO Scene'}</div>
+                    </div>
+                ` : ''}
                 <div class="diary-content">
                     📔 Dear Diary,<br><br>
                     ${entry.content}
@@ -246,12 +423,16 @@ function displayDiaryEntries(entries) {
                     - LEGO Lover ${wallet.toString().substring(0, 8)}...
                 </div>
                 <div class="diary-meta">
-                    📦 <a href="https://ipfs.io/ipfs/${entry.ipfsHash}" target="_blank" class="ipfs-link">
+                    📦 <a href="https://gateway.pinata.cloud/ipfs/${entry.ipfsHash}" target="_blank" class="ipfs-link">
                         View on IPFS: ${entry.ipfsHash.substring(0, 20)}...
+                    </a><br>
+                    🏠 <a href="http://127.0.0.1:8080/ipfs/${entry.ipfsHash}" target="_blank" class="ipfs-link">
+                        Try Local IPFS: ${entry.ipfsHash.substring(0, 8)}...
                     </a><br>
                     🔗 <a href="https://explorer.solana.com/tx/${entry.signature}?cluster=devnet" target="_blank" class="ipfs-link">
                         Transaction: ${entry.signature.substring(0, 20)}...
                     </a>
+                    ${hasImage ? `<br>🖼️ <span style="color: #666;">AI-generated ${entry.image.type} image</span>` : ''}
                 </div>
             </div>
         `;
@@ -265,6 +446,21 @@ function showStatus(message, type) {
     status.textContent = message;
     status.className = `status ${type}`;
     status.style.display = 'block';
+}
+
+function updateUIWithConfig() {
+    // Update button text with current config values
+    const sendLegoBtn = document.getElementById('sendLegoBtn');
+    const actionSection = sendLegoBtn.closest('.action-section');
+    const description = actionSection.querySelector('p');
+    
+    if (CONFIG.TESTING_MODE) {
+        sendLegoBtn.textContent = `Send ${CONFIG.TOKENS_PER_MESSAGE} LEGO for Diary Entry`;
+        description.textContent = `Send ${CONFIG.TOKENS_PER_MESSAGE} LEGO tokens to receive a personalized diary entry (testing price)`;
+    } else {
+        sendLegoBtn.textContent = `Send ${CONFIG.TOKENS_PER_MESSAGE} LEGO for Diary Entry`;
+        description.textContent = `Send ${CONFIG.TOKENS_PER_MESSAGE} LEGO tokens to receive a personalized diary entry`;
+    }
 }
 
 async function loadBalances() {
@@ -389,7 +585,7 @@ async function sendLegoForDiary() {
         sendLegoBtn.disabled = true;
         sendLegoBtn.textContent = 'Sending...';
         
-        // Create transaction to send 1000 LEGO tokens to message service
+        // Create transaction to send 10 LEGO tokens to message service
         const legoMint = new solanaWeb3.PublicKey(LEGO_MINT);
         const messageService = new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT);
         
@@ -411,7 +607,7 @@ async function sendLegoForDiary() {
             programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
             data: new Uint8Array([
                 3, // Transfer instruction
-                ...new Uint8Array(8).map((_, i) => Number((BigInt(1000 * 1000000000) >> BigInt(i * 8)) & BigInt(0xff))) // 1000 LEGO tokens
+                ...new Uint8Array(8).map((_, i) => Number((BigInt(CONFIG.TOKENS_PER_MESSAGE * 1000000000) >> BigInt(i * 8)) & BigInt(0xff))) // LEGO tokens from config
             ])
         });
         
@@ -425,7 +621,7 @@ async function sendLegoForDiary() {
         await connection.confirmTransaction(signature);
         
         console.log('LEGO diary request transaction:', signature);
-        showStatus('1000 LEGO sent! Your diary entry is being generated...', 'connected');
+        showStatus(`${CONFIG.TOKENS_PER_MESSAGE} LEGO sent! Your diary entry is being generated...`, 'connected');
         
         // Generate new diary entry with AI
         await generatePersonalizedDiaryEntry(signature, wallet.toString());

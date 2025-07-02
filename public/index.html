@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 LEGO Diary Reader - Image Gateway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #ff6b35;
+            font-size: 2.5em;
+            margin: 0 0 20px 0;
+        }
+        .info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .code {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧱 LEGO Diary Reader</h1>
+        <h2>📸 Image Gateway</h2>
+        
+        <div class="info">
+            <h3>🌐 GitHub Pages Image Gateway</h3>
+            <p>This directory serves as a decentralized image gateway for LEGO diary entries. Images are stored with their IPFS hash as the filename, allowing seamless fallback between IPFS and GitHub Pages.</p>
+            
+            <h4>📁 Directory Structure:</h4>
+            <div class="code">
+                /lego-diary-reader/public/<br>
+                ├── images/<br>
+                │   ├── QmXXXXXX.png  (IPFS hash filenames)<br>
+                │   ├── bafkreiXXXX.png<br>
+                │   └── ...<br>
+                └── index.html  (this file)
+            </div>
+        </div>
+        
+        <div class="info">
+            <h3>🔗 How It Works</h3>
+            <p><strong>Image Access Priority:</strong></p>
+            <ol>
+                <li><strong>Local Development:</strong> http://localhost:3000/images/HASH.png</li>
+                <li><strong>GitHub Pages:</strong> https://username.github.io/repo/lego-diary-reader/public/images/HASH.png</li>
+                <li><strong>IPFS Gateway:</strong> https://gateway.pinata.cloud/ipfs/HASH</li>
+            </ol>
+        </div>
+        
+        <a href="../index.html" class="btn">📖 Open Diary Reader</a>
+        <a href="images/" class="btn">📁 Browse Images</a>
+    </div>
+</body>
+</html>
