@@ -1,5 +1,5 @@
-// LEGO Diary Reader v4.0 - Full IPFS Integration + Native Access
-console.log('🧱 LEGO Diary Reader v4.0 - Full IPFS Integration + Native Access Loaded');
+// LEGO Diary Reader v10.1 - GitHub Pages Image Gateway + Enhanced Mode  
+console.log('🧱 LEGO Diary Reader v10.1 - GitHub Pages Image Gateway + Enhanced Mode Loaded');
 
 // Global variables
 let wallet = null;
