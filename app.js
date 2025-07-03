@@ -1,5 +1,5 @@
-// LEGO Diary Reader v10.1 - GitHub Pages Image Gateway + Enhanced Mode  
-console.log('🧱 LEGO Diary Reader v10.1 - GitHub Pages Image Gateway + Enhanced Mode Loaded');
+// LEGO Diary Reader v10.2 - Fixed GitHub Pages Image Auto-linking
+console.log('🧱 LEGO Diary Reader v10.2 - Fixed GitHub Pages Image Auto-linking Loaded');
 
 // Global variables
 let wallet = null;
@@ -282,6 +282,23 @@ async function createRealDiaryEntry(transaction, signatureInfo, ipfsHash, memoCo
                 }
             }
             
+            // DEBUG: Log what we have
+            console.log('🔍 DEBUG - Entry data:', {
+                signature: signature.slice(0, 8),
+                ipfsHash: ipfsHash,
+                imageData: imageData,
+                fullContent: fullContent.slice(0, 50)
+            });
+
+            // If no image data found but we have an IPFS hash, create image object for GitHub Pages
+            if (!imageData && ipfsHash) {
+                imageData = {
+                    ipfsHash: ipfsHash,
+                    data: null // Will be populated by getImageUrl()
+                };
+                console.log('🖼️ Creating image object for IPFS hash:', ipfsHash);
+            }
+
             return {
                 signature: signature,
                 content: fullContent,
@@ -334,10 +351,18 @@ async function createRealDiaryEntry(transaction, signatureInfo, ipfsHash, memoCo
             }
         }
         
+        // Create image object for GitHub Pages linking
+        const imageData = ipfsHash ? {
+            ipfsHash: ipfsHash,
+            data: null // Will be populated by getImageUrl()
+        } : null;
+        
+        console.log('🖼️ Memo entry - Creating image object for IPFS hash:', ipfsHash);
+
         return {
             signature: signature,
             content: previewContent,
-            image: null,
+            image: imageData,
             timestamp: date.toISOString(),
             date: date.toLocaleDateString('en-US', { 
                 weekday: 'long', 
@@ -384,13 +409,18 @@ function displayDiaryEntries(entries) {
         let imageSource = 'none';
         
         if (hasImage) {
-            // Priority: GitHub Pages (for IPFS hashes) > Local > Original
-            if (entry.image.ipfsHash) {
-                imageUrl = getImageUrl(entry.image.ipfsHash);
-                imageSource = CONFIG.USE_GITHUB_PAGES ? 'GitHub Pages' : 'Local HTTP';
-            } else if (entry.image.githubPagesUrl) {
+            // Priority: Direct GitHub Pages URL > IPFS hash > Original data
+            if (entry.image.githubPagesUrl) {
                 imageUrl = entry.image.githubPagesUrl;
                 imageSource = 'GitHub Pages (direct)';
+            } else if (entry.image.ipfsHash) {
+                imageUrl = getImageUrl(entry.image.ipfsHash);
+                imageSource = CONFIG.USE_GITHUB_PAGES ? 'GitHub Pages (may not exist)' : 'Local HTTP';
+                
+                // Add fallback IPFS gateway URL
+                if (CONFIG.USE_GITHUB_PAGES) {
+                    imageSource += ` | Fallback: IPFS Gateway`;
+                }
             } else if (entry.image.data) {
                 imageUrl = entry.image.data;
                 imageSource = 'Original URL';
@@ -411,7 +441,11 @@ function displayDiaryEntries(entries) {
                         <div style="display: none; width: 100%; max-width: 400px; height: 200px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; text-align: center; border: 3px dashed #fff;">
                             🧱<br><small style="font-size: 14px; margin-top: 10px;">Image Loading...</small>
                         </div>
-                        <div class="image-prompt" style="font-size: 0.9em; color: #666; margin-bottom: 15px;">🎨 ${entry.image.prompt || 'AI Generated LEGO Scene'}</div>
+                        <div class="image-prompt" style="font-size: 0.9em; color: #666; margin-bottom: 10px;">🎨 ${entry.image.prompt || 'AI Generated LEGO Scene'}</div>
+                        <div style="font-size: 0.8em; color: #007acc; margin-bottom: 15px;">
+                            <strong>🔗 Click to Test Image URL:</strong> <a href="${imageUrl}" target="_blank" style="color: #007acc; text-decoration: underline; font-weight: bold;">OPEN IMAGE IN NEW TAB → ${imageUrl}</a>
+                            ${entry.image.ipfsHash ? `<br><strong>🌐 Fallback IPFS:</strong> <a href="https://gateway.pinata.cloud/ipfs/${entry.image.ipfsHash}" target="_blank" style="color: #28a745; text-decoration: underline;">Try IPFS Gateway</a>` : ''}
+                        </div>
                     </div>
                 ` : `
                     <div class="diary-image">
