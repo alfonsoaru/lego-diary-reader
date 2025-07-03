@@ -496,6 +496,13 @@ async function sendLegoForDiary() {
         console.log('- splToken:', typeof splToken, splToken ? 'Available' : 'Not available');
         console.log('- CONFIG:', CONFIG ? 'Available' : 'Not available');
         
+        // Debug SPL Token library functions
+        if (splToken) {
+            console.log('🔍 Available splToken functions:', Object.keys(splToken));
+            console.log('🔍 getAssociatedTokenAddress type:', typeof splToken.getAssociatedTokenAddress);
+            console.log('🔍 createTransferInstruction type:', typeof splToken.createTransferInstruction);
+        }
+        
         if (!wallet) {
             throw new Error('Wallet not connected');
         }
