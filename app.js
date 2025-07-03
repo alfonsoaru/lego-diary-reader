@@ -301,11 +301,17 @@ function showError(message) {
 }
 
 function updateUIWithConfig() {
-    document.getElementById('tokensPerMessage').textContent = CONFIG.TOKENS_PER_MESSAGE.toLocaleString();
-    document.getElementById('tokensPerUsdc').textContent = CONFIG.TOKENS_PER_USDC.toLocaleString();
-    document.getElementById('minUsdc').textContent = CONFIG.MIN_USDC.toFixed(2);
-    document.getElementById('usdcExchangeAccount').textContent = USDC_EXCHANGE_ACCOUNT;
-    document.getElementById('messageServiceAccount').textContent = MESSAGE_SERVICE_ACCOUNT;
+    // Update UI elements if they exist (graceful handling for simplified UI)
+    const updateElement = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
+    };
+    
+    updateElement('tokensPerMessage', CONFIG.TOKENS_PER_MESSAGE.toLocaleString());
+    updateElement('tokensPerUsdc', CONFIG.TOKENS_PER_USDC.toLocaleString());
+    updateElement('minUsdc', CONFIG.MIN_USDC.toFixed(2));
+    updateElement('usdcExchangeAccount', USDC_EXCHANGE_ACCOUNT);
+    updateElement('messageServiceAccount', MESSAGE_SERVICE_ACCOUNT);
 }
 
 async function swapUSDCToLEGO() {
@@ -342,18 +348,18 @@ async function sendLegoForDiary() {
         const transaction = new solanaWeb3.Transaction();
         
         // Get or create associated token accounts
-        const senderTokenAccount = await solanaWeb3.getAssociatedTokenAddress(
+        const senderTokenAccount = await splToken.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             wallet
         );
         
-        const receiverTokenAccount = await solanaWeb3.getAssociatedTokenAddress(
+        const receiverTokenAccount = await splToken.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT)
         );
         
         // Add transfer instruction
-        const transferInstruction = solanaWeb3.createTransferInstruction(
+        const transferInstruction = splToken.createTransferInstruction(
             senderTokenAccount,
             receiverTokenAccount,
             wallet,
