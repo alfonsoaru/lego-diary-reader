@@ -538,7 +538,7 @@ async function generateLegoImageWithPrompt(openaiApiKey, customPrompt) {
       if (ipfsImageHash) {
         const path = require('path');
         const fs = require('fs');
-        const imagesDir = path.join(__dirname, 'lego-diary-reader', 'public', 'images');
+        const imagesDir = path.join(__dirname, 'public', 'images');
         const finalPath = path.join(imagesDir, `${ipfsImageHash}.png`);
         
         // Copy optimized file to final location with IPFS hash name
@@ -548,7 +548,7 @@ async function generateLegoImageWithPrompt(openaiApiKey, customPrompt) {
         // Automatically commit and push to GitHub
         try {
           const { execSync } = require('child_process');
-          const repoPath = path.join(__dirname, 'lego-diary-reader');
+          const repoPath = __dirname; // We're already in the repo directory
           
           console.log('📤 Auto-committing new image to GitHub...');
           execSync(`git add public/images/${ipfsImageHash}.png`, { cwd: repoPath });
