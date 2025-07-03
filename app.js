@@ -29,7 +29,20 @@ const legoBalanceSpan = document.getElementById('legoBalance');
 // Event listeners
 connectBtn.addEventListener('click', connectWallet);
 swapBtn.addEventListener('click', swapUSDCToLEGO);
-sendLegoBtn.addEventListener('click', sendLegoForDiary);
+
+// Debug: Check if sendLegoBtn exists
+console.log('🔍 sendLegoBtn element:', sendLegoBtn);
+console.log('🔍 sendLegoBtn type:', typeof sendLegoBtn);
+
+if (sendLegoBtn) {
+    sendLegoBtn.addEventListener('click', function(event) {
+        console.log('🎯 Button clicked - event triggered!');
+        sendLegoForDiary(event);
+    });
+    console.log('✅ Send LEGO button event listener added');
+} else {
+    console.error('❌ sendLegoBtn element not found!');
+}
 
 async function connectWallet() {
     try {
