@@ -1,53 +1,60 @@
-console.log('DEBUG: Script starting to load');
-// LEGO Diary Reader v11.0 - SIMPLIFIED: Blockchain + GitHub Only
-console.log('🧱 LEGO Diary Reader v11.0 - Blockchain + GitHub Only');
-console.log('🚀 Script is loading...');
+console.log('=== LEGO DIARY APP DEBUG START ===');
+console.log('1. Script file loading...');
 
-// Global variables
-let wallet = null;
-let connection = null;
+try {
+    console.log('2. Setting up global variables...');
+    // Global variables
+    let wallet = null;
+    let connection = null;
 
-// Initialize Solana connection
-const SOLANA_RPC = 'https://api.devnet.solana.com';
-connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
+    console.log('3. Checking if solanaWeb3 is available:', typeof solanaWeb3);
+    
+    // Initialize Solana connection
+    const SOLANA_RPC = 'https://api.devnet.solana.com';
+    console.log('4. Creating Solana connection...');
+    connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
+    console.log('5. Solana connection created successfully');
 
-// Token addresses - using CONFIG from config.js
-const USDC_MINT = CONFIG.TOKENS.USDC_MINT;
-const LEGO_MINT = CONFIG.TOKENS.LEGO_MINT;
-const USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
-const MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
+    console.log('6. Checking CONFIG availability:', typeof CONFIG);
+    // Token addresses - using CONFIG from config.js
+    const USDC_MINT = CONFIG.TOKENS.USDC_MINT;
+    const LEGO_MINT = CONFIG.TOKENS.LEGO_MINT;
+    const USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
+    const MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
+    console.log('7. Token addresses loaded successfully');
 
-// DOM elements
-console.log('🔍 Getting DOM elements...');
-const connectBtn = document.getElementById('connectBtn');
-const status = document.getElementById('status');
-const diaryEntries = document.getElementById('diaryEntries');
-const tokenActions = document.getElementById('tokenActions');
-const swapBtn = document.getElementById('swapBtn');
-const sendLegoBtn = document.getElementById('sendLegoBtn');
-const usdcAmountInput = document.getElementById('usdcAmount');
-const usdcBalanceSpan = document.getElementById('usdcBalance');
-const legoBalanceSpan = document.getElementById('legoBalance');
+    // DOM elements
+    console.log('8. Getting DOM elements...');
+    const connectBtn = document.getElementById('connectBtn');
+    const status = document.getElementById('status');
+    const diaryEntries = document.getElementById('diaryEntries');
+    const tokenActions = document.getElementById('tokenActions');
+    const swapBtn = document.getElementById('swapBtn');
+    const sendLegoBtn = document.getElementById('sendLegoBtn');
+    const usdcAmountInput = document.getElementById('usdcAmount');
+    const usdcBalanceSpan = document.getElementById('usdcBalance');
+    const legoBalanceSpan = document.getElementById('legoBalance');
 
-console.log('✅ DOM elements loaded successfully');
-console.log('🔍 sendLegoBtn found:', !!sendLegoBtn);
+    console.log('9. DOM elements loaded - sendLegoBtn found:', !!sendLegoBtn);
 
-// Event listeners
-connectBtn.addEventListener('click', connectWallet);
-swapBtn.addEventListener('click', swapUSDCToLEGO);
+    // Event listeners
+    console.log('10. Setting up event listeners...');
+    connectBtn.addEventListener('click', connectWallet);
+    swapBtn.addEventListener('click', swapUSDCToLEGO);
 
-// Debug: Check if sendLegoBtn exists
-console.log('🔍 sendLegoBtn element:', sendLegoBtn);
-console.log('🔍 sendLegoBtn type:', typeof sendLegoBtn);
+    if (sendLegoBtn) {
+        sendLegoBtn.addEventListener('click', function(event) {
+            console.log('🎯 BUTTON CLICKED - Starting sendLegoForDiary');
+            sendLegoForDiary(event);
+        });
+        console.log('11. Send LEGO button event listener added successfully');
+    } else {
+        console.error('ERROR: sendLegoBtn element not found!');
+    }
+    console.log('12. Setup complete!');
 
-if (sendLegoBtn) {
-    sendLegoBtn.addEventListener('click', function(event) {
-        console.log('🎯 Button clicked - event triggered!');
-        sendLegoForDiary(event);
-    });
-    console.log('✅ Send LEGO button event listener added');
-} else {
-    console.error('❌ sendLegoBtn element not found!');
+} catch (error) {
+    console.error('SETUP ERROR:', error);
 }
 
 async function connectWallet() {
