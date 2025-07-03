@@ -164,27 +164,35 @@ async function createSimpleDiaryEntry(transaction, signatureInfo, memoContent) {
         ipfsHash: diaryIpfsHash
     };
     
-    // Check if there's a matching image on GitHub Pages
-    // Try the diary IPFS hash and common variations
-    const possibleImageHashes = [
-        diaryIpfsHash,
-        // You can add logic here to map diary hash to image hash if needed
-    ];
-    
-    for (const imageHash of possibleImageHashes) {
-        const githubImageUrl = `${CONFIG.GITHUB_PAGES_BASE_URL}${imageHash}.png`;
-        try {
-            // Test if image exists on GitHub Pages (this won't work due to CORS, but we'll try anyway)
-            entry.image = {
-                githubPagesUrl: githubImageUrl,
-                ipfsHash: imageHash,
-                type: 'github-pages'
-            };
-            console.log('🖼️ Using GitHub Pages image URL:', githubImageUrl);
-            break;
-        } catch (error) {
-            // Image test failed, but we'll still try to display it
+    // Try to fetch diary JSON from GitHub to get image information
+    try {
+        const diaryJsonUrl = `https://alfonsoaru.github.io/lego-diary-reader/public/diary/${diaryIpfsHash}.json`;
+        const response = await fetch(diaryJsonUrl);
+        
+        if (response.ok) {
+            const diaryData = await response.json();
+            console.log('📖 Found diary JSON on GitHub:', diaryData);
+            
+            // Update entry with full diary content
+            if (diaryData.content) {
+                entry.content = diaryData.content;
+            }
+            
+            // Set image data from diary JSON
+            if (diaryData.image && diaryData.image.ipfsHash) {
+                const imageUrl = `${CONFIG.GITHUB_PAGES_BASE_URL}${diaryData.image.ipfsHash}.png`;
+                entry.image = {
+                    githubPagesUrl: imageUrl,
+                    ipfsHash: diaryData.image.ipfsHash,
+                    type: 'github-pages-from-diary'
+                };
+                console.log('🖼️ Using image from diary JSON:', imageUrl);
+            }
+        } else {
+            console.log('📄 No diary JSON found on GitHub, using basic entry');
         }
+    } catch (error) {
+        console.log('⚠️ Failed to fetch diary JSON:', error.message);
     }
     
     return entry;

@@ -541,23 +541,12 @@ async function generateLegoImageWithPrompt(openaiApiKey, customPrompt) {
         const imagesDir = path.join(__dirname, 'public', 'images');
         const finalPath = path.join(imagesDir, `${ipfsImageHash}.png`);
         
-        // Copy optimized file to final location with IPFS hash name
+        // Copy optimized file to final location with image CID name
         fs.copyFileSync(optimizedPath, finalPath);
-        console.log(`🏷️ Image renamed to IPFS hash: ${ipfsImageHash}.png`);
+        console.log(`🏷️ Image saved with CID: ${ipfsImageHash}.png`);
         
-        // Automatically commit and push to GitHub
-        try {
-          const { execSync } = require('child_process');
-          const repoPath = __dirname; // We're already in the repo directory
-          
-          console.log('📤 Auto-committing new image to GitHub...');
-          execSync(`git add public/images/${ipfsImageHash}.png`, { cwd: repoPath });
-          execSync(`git commit -m "Add diary image ${ipfsImageHash}"`, { cwd: repoPath });
-          execSync(`git push`, { cwd: repoPath });
-          console.log(`✅ Image ${ipfsImageHash}.png committed and pushed to GitHub`);
-        } catch (gitError) {
-          console.log('⚠️ Git commit/push failed:', gitError.message);
-        }
+        // NOTE: We'll commit this to GitHub after we get the diary CID
+        // This ensures we can commit both the JSON and image together
         
         // Clean up temp file
         try {
