@@ -486,32 +486,53 @@ async function swapUSDCToLEGO() {
 
 async function sendLegoForDiary() {
     try {
+        console.log('🎯 Send LEGO button clicked');
         showStatus('Sending LEGO tokens for diary entry...', 'loading');
         sendLegoBtn.disabled = true;
         
+        console.log('📊 Checking dependencies...');
+        console.log('- wallet:', wallet ? 'Connected' : 'Not connected');
+        console.log('- connection:', connection ? 'Available' : 'Not available');
+        console.log('- splToken:', typeof splToken, splToken ? 'Available' : 'Not available');
+        console.log('- CONFIG:', CONFIG ? 'Available' : 'Not available');
+        
+        if (!wallet) {
+            throw new Error('Wallet not connected');
+        }
+        
+        if (!splToken) {
+            throw new Error('SPL Token library not loaded');
+        }
+        
         const legoAmount = CONFIG.TOKENS_PER_MESSAGE;
+        console.log('💰 LEGO amount to send:', legoAmount);
         
         // Create transaction to send LEGO tokens to message service
         const transaction = new solanaWeb3.Transaction();
         
         // Get or create associated token accounts
+        console.log('🔗 Getting token accounts...');
         const senderTokenAccount = await splToken.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             wallet
         );
+        console.log('👤 Sender token account:', senderTokenAccount.toString());
         
         const receiverTokenAccount = await splToken.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT)
         );
+        console.log('🏦 Receiver token account:', receiverTokenAccount.toString());
         
         // Add transfer instruction
+        console.log('📝 Creating transfer instruction...');
         const transferInstruction = splToken.createTransferInstruction(
             senderTokenAccount,
             receiverTokenAccount,
             wallet,
             legoAmount * Math.pow(10, 6) // Convert to token decimals
         );
+        console.log('✅ Transfer instruction created');
         
         transaction.add(transferInstruction);
         
