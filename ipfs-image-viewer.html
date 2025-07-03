@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPFS Image Viewer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 2em; }
+    img { max-width: 80%; height: auto; margin-top: 1em; border: 1px solid #ccc; }
+    .loading { color: #666; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>IPFS Image Viewer</h1>
+  <p id="status" class="loading">Initializing IPFS node...</p>
+  <img id="ipfsImage" alt="Loading from IPFS..." style="display: none;" />
+
+  <script src="https://unpkg.com/ipfs-core@0.18.1/dist/index.min.js"></script>
+  <script>
+    async function loadFromIPFS() {
+      try {
+        const status = document.getElementById('status')
+        const image = document.getElementById('ipfsImage')
+        
+        status.textContent = 'Creating browser IPFS node...'
+        
+        const ipfs = await IpfsCore.create({
+          repo: 'ipfs-' + Math.random(),
+          config: {
+            Bootstrap: [
+              '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+              '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa'
+            ]
+          },
+          libp2p: {
+            connectionManager: {
+              maxConnections: 10
+            }
+          }
+        })
+        
+        const cid = 'QmNN6geeiFzMoWnEvmaSGazhRZXuPox3jsr1g7kvJBVxZL'
+        status.textContent = `Fetching from IPFS: ${cid}...`
+
+        const chunks = []
+        for await (const chunk of ipfs.cat(cid)) {
+          chunks.push(chunk)
+        }
+
+        const data = new TextDecoder().decode(new Uint8Array(chunks.flat()))
+        const jsonData = JSON.parse(data)
+        
+        status.textContent = 'Loading image...'
+        
+        const imageUrl = jsonData.content.image.data || jsonData.content.image.ipfsUrl
+        
+        if (imageUrl) {
+          image.src = imageUrl
+          image.style.display = 'block'
+          status.textContent = 'Image loaded from IPFS!'
+        } else {
+          status.textContent = 'No image found'
+          status.className = 'error'
+        }
+        
+        await ipfs.stop()
+        
+      } catch (error) {
+        console.error('Error:', error)
+        document.getElementById('status').textContent = `Error: ${error.message}`
+        document.getElementById('status').className = 'error'
+      }
+    }
+    
+    loadFromIPFS()
+  </script>
+</body>
+</html>

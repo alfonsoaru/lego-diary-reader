@@ -1,0 +1,4 @@
+🧱 LEGO Diary Service running on port 3000
+📝 Generate diary: POST /generate-diary
+📖 Get diary: GET /diary/:signature
+📚 Get all diaries: GET /diary

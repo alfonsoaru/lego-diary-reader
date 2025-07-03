@@ -370,6 +370,22 @@ export PINATA_API_SECRET="092c7fc7..." # Auth OK, scopes needed ⚠️
 export GEMINI_API_KEY="AIzaSy..." # Quota exceeded, fallback working ✅
 ```
 
+### 🎯 **IPFS Hash Architecture**
+
+The system generates two different IPFS hashes during content creation:
+
+1. **Image Hash**: `bafkreid2bvl6edeonvqcwtxcoppiups3zktxcaqctmjpiiuknccklfu3zq`
+   - This is the IPFS hash of just the image file itself
+   - Generated when the image is uploaded to IPFS
+   - Used for the actual image filename: `{image-hash}.png`
+
+2. **Diary Entry Hash**: `bafkreidntkgqn4zai23keekrxayalwxjmzsm66fqyg6oeelvebgiiqi6y4`
+   - This is the IPFS hash of the entire diary entry (text + metadata + image reference)
+   - Generated when the complete diary entry JSON is uploaded to IPFS
+   - Contains the reference to the image hash within the diary content
+
+**Important**: The image filename should always use the **image hash**, not the diary entry hash. The diary entry references the image hash internally, but the actual image file is stored and accessed using its own unique IPFS hash.
+
 ### 🧪 **Test Commands**
 ```bash
 # Test Pinata IPFS (debug scopes)

@@ -1,13 +1,13 @@
 // Configuration for LEGO Diary Reader
 const CONFIG = {
     // GitHub Pages configuration
-    GITHUB_PAGES_BASE_URL: 'https://alfonsoaru.github.io/lego-diary-reader/lego-diary-reader/public/images/',
+    GITHUB_PAGES_BASE_URL: 'https://alfonsoaru.github.io/lego-diary-reader/public/images/',
     
     // Fallback to local development
     LOCAL_BASE_URL: 'http://localhost:3000/images/',
     
-    // Use GitHub Pages in production
-    USE_GITHUB_PAGES: window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1',
+    // Use GitHub Pages in production (and for testing on localhost)
+    USE_GITHUB_PAGES: true, // Force GitHub Pages for testing
     
     // Token configuration
     TOKENS: {
