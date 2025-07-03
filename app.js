@@ -1,5 +1,6 @@
 // LEGO Diary Reader v11.0 - SIMPLIFIED: Blockchain + GitHub Only
 console.log('🧱 LEGO Diary Reader v11.0 - Blockchain + GitHub Only');
+console.log('🚀 Script is loading...');
 
 // Global variables
 let wallet = null;
@@ -16,6 +17,7 @@ const USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
 const MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
 
 // DOM elements
+console.log('🔍 Getting DOM elements...');
 const connectBtn = document.getElementById('connectBtn');
 const status = document.getElementById('status');
 const diaryEntries = document.getElementById('diaryEntries');
@@ -25,6 +27,9 @@ const sendLegoBtn = document.getElementById('sendLegoBtn');
 const usdcAmountInput = document.getElementById('usdcAmount');
 const usdcBalanceSpan = document.getElementById('usdcBalance');
 const legoBalanceSpan = document.getElementById('legoBalance');
+
+console.log('✅ DOM elements loaded successfully');
+console.log('🔍 sendLegoBtn found:', !!sendLegoBtn);
 
 // Event listeners
 connectBtn.addEventListener('click', connectWallet);
