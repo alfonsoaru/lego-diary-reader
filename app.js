@@ -290,13 +290,11 @@ async function createRealDiaryEntry(transaction, signatureInfo, ipfsHash, memoCo
                 fullContent: fullContent.slice(0, 50)
             });
 
-            // If no image data found but we have an IPFS hash, create image object for GitHub Pages
+            // If no image data found, don't create fallback with diary hash
+            // (This was causing diary entry hash to be used instead of image hash)
             if (!imageData && ipfsHash) {
-                imageData = {
-                    ipfsHash: ipfsHash,
-                    data: null // Will be populated by getImageUrl()
-                };
-                console.log('🖼️ Creating image object for IPFS hash:', ipfsHash);
+                console.log('⚠️ No image data found for diary entry:', ipfsHash);
+                // Don't create fallback image object that uses diary hash
             }
 
             return {
