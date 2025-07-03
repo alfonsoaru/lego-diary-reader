@@ -1,0 +1,18 @@
+{
+  "customerAddress": "AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary, today I discovered an amazing new LEGO building technique that completely changed how I approach complex structures. The way the pieces lock together in this new pattern is absolutely brilliant! I spent hours perfecting it and can't wait to use it in my next big build.",
+  "image": {
+    "prompt": "A vibrant LEGO building scene with colorful bricks scattered on a table, warm lighting, detailed plastic textures",
+    "type": "dalle-generated-custom",
+    "ipfsHash": "bafkreidqghwjd4tc52sdwe5bjnnuctpy2qrvh3ux73jevxxywat2cvcz5e",
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreidqghwjd4tc52sdwe5bjnnuctpy2qrvh3ux73jevxxywat2cvcz5e.png",
+    "timestamp": "2025-07-03T13:20:55.323Z"
+  },
+  "timestamp": "2025-07-03T13:20:55.323Z",
+  "date": "Thursday, July 3, 2025",
+  "time": "1:20:55 PM",
+  "shortAddress": "AjQDtGGv...",
+  "type": "lego-diary-entry"
+}

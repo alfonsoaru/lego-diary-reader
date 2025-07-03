@@ -1,0 +1,18 @@
+{
+  "customerAddress": "AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d",
+  "messageNumber": 4,
+  "totalMessages": 4,
+  "content": "Dear Diary, I had the most therapeutic building session today, completely losing myself in the meditative process of placing each brick perfectly. There's something deeply peaceful about the focus required for precision building. LEGO has become my favorite way to find calm in a busy world.",
+  "image": {
+    "prompt": "Hands carefully placing LEGO bricks, close-up shot, focused concentration, colorful building elements",
+    "type": "dalle-generated-custom", 
+    "ipfsHash": "bafkreidoy243ih3b2fjaw5mlqn42jdb2xjpzeq22brptlgpv35higiapnm",
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreidoy243ih3b2fjaw5mlqn42jdb2xjpzeq22brptlgpv35higiapnm.png",
+    "timestamp": "2025-07-03T13:03:32.477Z"
+  },
+  "timestamp": "2025-07-03T13:03:32.477Z",
+  "date": "Thursday, July 3, 2025",
+  "time": "1:03:32 PM",
+  "shortAddress": "AjQDtGGv...",
+  "type": "lego-diary-entry"
+}

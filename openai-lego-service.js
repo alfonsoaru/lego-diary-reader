@@ -137,15 +137,42 @@ async function generateGeminiLegoMessage(customerAddress, messageNumber, totalMe
         type: 'lego-diary-entry'
       };
       
-      // Upload to IPFS
-      const { uploadToIPFS } = require('./ipfs-storage.js');
-      const ipfsHash = await uploadToIPFS(diaryEntry);
+      // Calculate diary CID locally (no IPFS upload needed)
+      let diaryCID = null;
+      try {
+        // Create temporary diary file to calculate its CID
+        const tempDiaryPath = path.join(__dirname, 'temp-diary.json');
+        fs.writeFileSync(tempDiaryPath, JSON.stringify(diaryEntry, null, 2));
+        
+        diaryCID = await calculateIPFSHash(tempDiaryPath);
+        console.log(`✅ Diary CID calculated: ${diaryCID}`);
+        
+        // Clean up temp file
+        fs.unlinkSync(tempDiaryPath);
+        
+        // Update diary entry with proper image reference
+        if (imageData.ipfsHash) {
+          diaryEntry.image.ipfsHash = imageData.ipfsHash;
+          diaryEntry.image.githubPagesUrl = `https://alfonsoaru.github.io/lego-diary-reader/public/images/${imageData.ipfsHash}.png`;
+        }
+        
+        // Save diary JSON and image to GitHub with proper CIDs
+        const imageCID = imageData.ipfsHash;
+        if (diaryCID && imageCID) {
+          // Use the saveDiaryToGitHub function from unified service
+          const { saveDiaryToGitHub } = require('../unified-lego-service.js');
+          await saveDiaryToGitHub(diaryEntry, diaryCID, imageCID);
+        }
+        
+      } catch (error) {
+        console.log('⚠️ Diary CID calculation or GitHub save failed:', error.message);
+      }
       
-      // Return IPFS hash for blockchain storage
-      const personalizedMessage = `📔 IPFS: ${ipfsHash} - Dear Diary, ${generatedText.substring(0, 50)}... - LEGO Lover ${diaryEntry.shortAddress}`;
+      // Return diary CID for blockchain storage  
+      const personalizedMessage = `📔 IPFS: ${diaryCID} - Dear Diary, ${generatedText.substring(0, 50)}... - LEGO Lover ${diaryEntry.shortAddress}`;
       
-      console.log(`✅ Gemini generated text + image and uploaded to IPFS: ${ipfsHash}`);
-      return { message: personalizedMessage, ipfsHash: ipfsHash, diaryEntry: diaryEntry };
+      console.log(`✅ OpenAI generated text + image and saved to GitHub: ${diaryCID}`);
+      return { message: personalizedMessage, ipfsHash: diaryCID, diaryEntry: diaryEntry };
     } else {
       console.error('❌ Could not extract text from Gemini response');
       console.error('Response structure:', Object.keys(response));

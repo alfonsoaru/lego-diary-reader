@@ -68,24 +68,165 @@ async function connectWallet() {
 
 async function loadDiaryEntries() {
     try {
-        showStatus('Reading your diary entries from the blockchain...', 'loading');
-        diaryEntries.innerHTML = '<div class="loading">🔍 Scanning blockchain for your LEGO diary entries...</div>';
+        showStatus('Reading your diary entries from GitHub...', 'loading');
+        diaryEntries.innerHTML = '<div class="loading">📖 Loading your LEGO diary entries from GitHub...</div>';
         
-        // Get recent transactions for this wallet (reduced to avoid rate limits)
-        const signatures = await connection.getSignaturesForAddress(wallet, { limit: 10 });
-        console.log(`Found ${signatures.length} transactions`);
+        // Try to get list of diary JSON files from GitHub
+        const entries = await loadDiariesFromGitHub();
         
-        const entries = [];
+        if (entries.length === 0) {
+            // Fallback: scan blockchain for entries (but much more limited)
+            console.log('📡 No entries found on GitHub, checking recent blockchain activity...');
+            await loadDiariesFromBlockchain();
+        } else {
+            displayDiaryEntries(entries);
+        }
         
-        // Process transactions to find diary entries (with rate limiting)
+    } catch (error) {
+        console.error('Error loading diary entries:', error);
+        showError('Failed to load diary entries: ' + error.message);
+    }
+}
+
+async function loadDiariesFromGitHub() {
+    const entries = [];
+    
+    try {
+        console.log('🗂️ Looking for diary JSON files on GitHub...');
+        
+        // Try to fetch the directory index page and parse it for .json files
+        const baseUrl = 'https://alfonsoaru.github.io/lego-diary-reader/public/diary/';
+        
+        // Since we can't directly list GitHub Pages directories, we'll try a different approach:
+        // Look for recent diary entries by trying common IPFS hash patterns
+        const recentHashes = await tryCommonDiaryHashes();
+        
+        for (const hash of recentHashes) {
+            try {
+                const diaryJsonUrl = `${baseUrl}${hash}.json`;
+                console.log(`📋 Trying to fetch: ${hash}.json`);
+                
+                const response = await fetch(diaryJsonUrl);
+                if (response.ok) {
+                    const diaryData = await response.json();
+                    console.log(`✅ Found diary entry: ${hash}`);
+                    
+                    // Create entry from GitHub data
+                    const entry = {
+                        signature: `github-${hash}`,
+                        content: diaryData.content || 'Diary entry content',
+                        timestamp: diaryData.timestamp || new Date().toISOString(),
+                        date: diaryData.date || new Date().toLocaleDateString(),
+                        time: diaryData.time || new Date().toLocaleTimeString(),
+                        wallet: diaryData.shortAddress || 'LEGO Lover',
+                        ipfsHash: hash,
+                        source: 'github-direct'
+                    };
+                    
+                    // Add image if available
+                    if (diaryData.image && diaryData.image.ipfsHash) {
+                        const imageUrl = `https://alfonsoaru.github.io/lego-diary-reader/public/images/${diaryData.image.ipfsHash}.png`;
+                        entry.image = {
+                            githubPagesUrl: imageUrl,
+                            ipfsHash: diaryData.image.ipfsHash,
+                            type: 'github-pages-direct'
+                        };
+                    }
+                    
+                    entries.push(entry);
+                }
+            } catch (error) {
+                // Skip failed attempts silently
+                console.log(`⚪ ${hash}.json not found`);
+            }
+        }
+        
+        // Sort by timestamp (newest first)
+        entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        console.log(`📖 Found ${entries.length} diary entries directly from GitHub`);
+        return entries;
+        
+    } catch (error) {
+        console.log('⚠️ GitHub directory scan failed:', error.message);
+        return entries;
+    }
+}
+
+async function tryCommonDiaryHashes() {
+    // Try to discover diary hashes by checking recent blockchain activity first
+    // This gives us a seed list of potential diary CIDs to look for on GitHub
+    const potentialHashes = [];
+    
+    try {
+        if (wallet && connection) {
+            console.log('🔍 Getting recent transaction signatures for hash discovery...');
+            const signatures = await connection.getSignaturesForAddress(wallet, { limit: 20 });
+            
+            for (const sig of signatures.slice(0, 10)) { // Check recent 10 only
+                try {
+                    const transaction = await connection.getTransaction(sig.signature, {
+                        commitment: 'confirmed',
+                        maxSupportedTransactionVersion: 0
+                    });
+                    
+                    if (transaction && transaction.transaction.message.instructions) {
+                        for (const instruction of transaction.transaction.message.instructions) {
+                            if (instruction.data) {
+                                try {
+                                    const decoded = Buffer.from(instruction.data, 'base64').toString('utf-8');
+                                    const ipfsMatch = decoded.match(/📔 IPFS: (bafkrei[a-z2-7]{52})/);
+                                    if (ipfsMatch) {
+                                        potentialHashes.push(ipfsMatch[1]);
+                                    }
+                                } catch (e) {
+                                    // Skip invalid instruction data
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Skip failed transaction fetches
+                }
+            }
+        }
+    } catch (error) {
+        console.log('⚠️ Blockchain hash discovery failed, using fallback approach');
+    }
+    
+    // Add some hardcoded recent patterns as fallback
+    if (potentialHashes.length === 0) {
+        console.log('🔄 Using fallback hash discovery approach...');
+        // These would be recent diary hashes we know exist
+        // In a real implementation, we'd maintain an index file
+        potentialHashes.push(
+            'bafkreidm7g5vdvcep56bppymacos56e6vtg7nofogterhzctoweo7hf664',
+            'bafkreiel6dyddpxpeewkpk6jb66h3qdojgqppcp5lvigwey4x2wjslka7i',
+            'bafkreigio72hakd4im6hnjs7uiaky2to6huqzvmoeedf6ezp3eqfbj2qjm',
+            'bafkreidoy243ih3b2fjaw5mlqn42jdb2xjpzeq22brptlgpv35higiapnm'
+        );
+    }
+    
+    console.log(`🎯 Will try ${potentialHashes.length} potential diary hashes`);
+    return potentialHashes;
+}
+
+async function loadDiariesFromBlockchain() {
+    const entries = [];
+    
+    try {
+        // Get only the most recent transactions to avoid rate limits
+        const signatures = await connection.getSignaturesForAddress(wallet, { limit: 5 });
+        console.log(`📡 Checking ${signatures.length} recent blockchain transactions...`);
+        
         for (let i = 0; i < signatures.length; i++) {
             const signatureInfo = signatures[i];
             
-            // Add delay between requests to avoid rate limiting
-            if (i > 0 && i % 3 === 0) {
-                console.log('⏱️ Pausing to avoid rate limits...');
-                await new Promise(resolve => setTimeout(resolve, 1000));
+            // Add delay to avoid rate limits
+            if (i > 0) {
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
+            
             try {
                 const transaction = await connection.getTransaction(signatureInfo.signature, {
                     commitment: 'confirmed',
@@ -94,7 +235,7 @@ async function loadDiaryEntries() {
                 
                 if (!transaction) continue;
                 
-                // Look for memos with IPFS hashes
+                // Look for diary memos
                 const instructions = transaction.transaction.message.instructions;
                 
                 for (const instruction of instructions) {
@@ -102,8 +243,8 @@ async function loadDiaryEntries() {
                         try {
                             const decoded = Buffer.from(instruction.data, 'base64').toString('utf-8');
                             
-                            // Look for diary entry patterns in memos
-                            if (decoded.includes('📔 IPFS:') || decoded.includes('LEGO→')) {
+                            // Look for diary entry patterns
+                            if (decoded.includes('📔 IPFS:')) {
                                 const entry = await createSimpleDiaryEntry(transaction, signatureInfo, decoded);
                                 if (entry) {
                                     entries.push(entry);
@@ -116,27 +257,19 @@ async function loadDiaryEntries() {
                 }
                 
             } catch (error) {
-                console.log('Error processing transaction:', error.message);
-                
-                // If we hit rate limits, wait longer and continue
-                if (error.message.includes('429') || error.message.includes('Too many requests')) {
-                    console.log('⏱️ Rate limited, waiting 2 seconds...');
+                console.log('⚠️ Transaction fetch error:', error.message);
+                if (error.message.includes('429')) {
                     await new Promise(resolve => setTimeout(resolve, 2000));
                 }
             }
         }
         
-        // Remove duplicates and sort by timestamp
-        const uniqueEntries = entries.filter((entry, index, self) => 
-            index === self.findIndex(e => e.signature === entry.signature)
-        );
-        uniqueEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        displayDiaryEntries(uniqueEntries);
+        entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        displayDiaryEntries(entries);
         
     } catch (error) {
-        console.error('Error loading diary entries:', error);
-        showError('Failed to load diary entries: ' + error.message);
+        console.error('Blockchain scan error:', error);
+        showError('Failed to load recent diary entries from blockchain');
     }
 }
 
@@ -267,7 +400,8 @@ function displayDiaryEntries(entries) {
     });
     
     diaryEntries.innerHTML = html;
-    showStatus(`Loaded ${entries.length} diary entries from blockchain`, 'success');
+    const source = entries.length > 0 && entries[0].source === 'github-direct' ? 'GitHub' : 'blockchain';
+    showStatus(`Loaded ${entries.length} diary entries from ${source}`, 'success');
 }
 
 // Rest of the functions (loadBalances, swapUSDCToLEGO, etc.) remain the same...

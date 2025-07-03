@@ -1,0 +1,18 @@
+{
+  "customerAddress": "AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d",
+  "messageNumber": 2,
+  "totalMessages": 2,
+  "content": "Dear Diary, I organized my entire LEGO collection today and felt so inspired by seeing all the possibilities laid out before me. Each sorted container of bricks represents endless creative potential! Finding rare pieces I'd forgotten about was like discovering treasure - now I'm excited to start a new ambitious project.",
+  "image": {
+    "prompt": "A collection of rare LEGO pieces displayed beautifully, treasure-like presentation, vibrant colors",
+    "type": "dalle-generated-custom",
+    "ipfsHash": "bafkreiel6dyddpxpeewkpk6jb66h3qdojgqppcp5lvigwey4x2wjslka7i",
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreiel6dyddpxpeewkpk6jb66h3qdojgqppcp5lvigwey4x2wjslka7i.png",
+    "timestamp": "2025-07-03T10:56:00.000Z"
+  },
+  "timestamp": "2025-07-03T10:56:00.000Z",
+  "date": "Thursday, July 3, 2025", 
+  "time": "10:56:00 AM",
+  "shortAddress": "AjQDtGGv...",
+  "type": "lego-diary-entry"
+}

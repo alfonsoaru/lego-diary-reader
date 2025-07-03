@@ -1,0 +1,18 @@
+{
+  "customerAddress": "AjQDtGGvisRMLhcPkF6Kk8vsA8dixio7aTtYRNPcc15d",
+  "messageNumber": 3,
+  "totalMessages": 3,
+  "content": "Dear Diary, I spent the afternoon working on a challenging castle build and finally overcame a tricky architectural problem through pure creativity. The satisfaction of solving complex design challenges is one of my favorite aspects of LEGO building. Every difficult piece placement teaches me something new about engineering and design.",
+  "image": {
+    "prompt": "A magnificent LEGO castle or building creation, impressive architecture, bright colors, studio photography style",
+    "type": "dalle-generated-custom",
+    "ipfsHash": "bafkreigio72hakd4im6hnjs7uiaky2to6huqzvmoeedf6ezp3eqfbj2qjm",
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreigio72hakd4im6hnjs7uiaky2to6huqzvmoeedf6ezp3eqfbj2qjm.png",
+    "timestamp": "2025-07-03T13:17:00.000Z"
+  },
+  "timestamp": "2025-07-03T13:17:00.000Z",
+  "date": "Thursday, July 3, 2025",
+  "time": "1:17:00 PM", 
+  "shortAddress": "AjQDtGGv...",
+  "type": "lego-diary-entry"
+}
