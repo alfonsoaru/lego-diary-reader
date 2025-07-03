@@ -1,11 +1,14 @@
 console.log('=== LEGO DIARY APP DEBUG START ===');
 console.log('1. Script file loading...');
 
+// Global variables (outside try-catch so functions can access them)
+let wallet = null;
+let connection = null;
+let USDC_MINT, LEGO_MINT, USDC_EXCHANGE_ACCOUNT, MESSAGE_SERVICE_ACCOUNT;
+let connectBtn, status, diaryEntries, tokenActions, swapBtn, sendLegoBtn, usdcAmountInput, usdcBalanceSpan, legoBalanceSpan;
+
 try {
     console.log('2. Setting up global variables...');
-    // Global variables
-    let wallet = null;
-    let connection = null;
 
     console.log('3. Checking if solanaWeb3 is available:', typeof solanaWeb3);
     
@@ -17,23 +20,23 @@ try {
 
     console.log('6. Checking CONFIG availability:', typeof CONFIG);
     // Token addresses - using CONFIG from config.js
-    const USDC_MINT = CONFIG.TOKENS.USDC_MINT;
-    const LEGO_MINT = CONFIG.TOKENS.LEGO_MINT;
-    const USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
-    const MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
+    USDC_MINT = CONFIG.TOKENS.USDC_MINT;
+    LEGO_MINT = CONFIG.TOKENS.LEGO_MINT;
+    USDC_EXCHANGE_ACCOUNT = CONFIG.TOKENS.USDC_EXCHANGE_ACCOUNT;
+    MESSAGE_SERVICE_ACCOUNT = CONFIG.TOKENS.MESSAGE_SERVICE_ACCOUNT;
     console.log('7. Token addresses loaded successfully');
 
     // DOM elements
     console.log('8. Getting DOM elements...');
-    const connectBtn = document.getElementById('connectBtn');
-    const status = document.getElementById('status');
-    const diaryEntries = document.getElementById('diaryEntries');
-    const tokenActions = document.getElementById('tokenActions');
-    const swapBtn = document.getElementById('swapBtn');
-    const sendLegoBtn = document.getElementById('sendLegoBtn');
-    const usdcAmountInput = document.getElementById('usdcAmount');
-    const usdcBalanceSpan = document.getElementById('usdcBalance');
-    const legoBalanceSpan = document.getElementById('legoBalance');
+    connectBtn = document.getElementById('connectBtn');
+    status = document.getElementById('status');
+    diaryEntries = document.getElementById('diaryEntries');
+    tokenActions = document.getElementById('tokenActions');
+    swapBtn = document.getElementById('swapBtn');
+    sendLegoBtn = document.getElementById('sendLegoBtn');
+    usdcAmountInput = document.getElementById('usdcAmount');
+    usdcBalanceSpan = document.getElementById('usdcBalance');
+    legoBalanceSpan = document.getElementById('legoBalance');
 
     console.log('9. DOM elements loaded - sendLegoBtn found:', !!sendLegoBtn);
 
