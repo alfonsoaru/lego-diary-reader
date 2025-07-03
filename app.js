@@ -493,21 +493,35 @@ async function sendLegoForDiary() {
         console.log('📊 Checking dependencies...');
         console.log('- wallet:', wallet ? 'Connected' : 'Not connected');
         console.log('- connection:', connection ? 'Available' : 'Not available');
-        console.log('- splToken:', typeof splToken, splToken ? 'Available' : 'Not available');
         console.log('- CONFIG:', CONFIG ? 'Available' : 'Not available');
         
+        // Check if SPL Token library is available
+        let splTokenLib = null;
+        if (typeof splToken !== 'undefined') {
+            splTokenLib = splToken;
+            console.log('- splToken: Available via global');
+        } else if (typeof window.splToken !== 'undefined') {
+            splTokenLib = window.splToken;
+            console.log('- splToken: Available via window.splToken');
+        } else if (typeof solanaWeb3 !== 'undefined' && solanaWeb3.splToken) {
+            splTokenLib = solanaWeb3.splToken;
+            console.log('- splToken: Available via solanaWeb3.splToken');
+        } else {
+            console.log('- splToken: Not available, will use manual approach');
+        }
+        
         // Debug SPL Token library functions
-        if (splToken) {
-            console.log('🔍 Available splToken functions:', Object.keys(splToken));
-            console.log('🔍 getAssociatedTokenAddress type:', typeof splToken.getAssociatedTokenAddress);
-            console.log('🔍 createTransferInstruction type:', typeof splToken.createTransferInstruction);
+        if (splTokenLib) {
+            console.log('🔍 Available splToken functions:', Object.keys(splTokenLib));
+            console.log('🔍 getAssociatedTokenAddress type:', typeof splTokenLib.getAssociatedTokenAddress);
+            console.log('🔍 createTransferInstruction type:', typeof splTokenLib.createTransferInstruction);
         }
         
         if (!wallet) {
             throw new Error('Wallet not connected');
         }
         
-        if (!splToken) {
+        if (!splTokenLib) {
             throw new Error('SPL Token library not loaded');
         }
         
@@ -519,13 +533,13 @@ async function sendLegoForDiary() {
         
         // Get or create associated token accounts
         console.log('🔗 Getting token accounts...');
-        const senderTokenAccount = await splToken.getAssociatedTokenAddress(
+        const senderTokenAccount = await splTokenLib.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             wallet
         );
         console.log('👤 Sender token account:', senderTokenAccount.toString());
         
-        const receiverTokenAccount = await splToken.getAssociatedTokenAddress(
+        const receiverTokenAccount = await splTokenLib.getAssociatedTokenAddress(
             new solanaWeb3.PublicKey(LEGO_MINT),
             new solanaWeb3.PublicKey(MESSAGE_SERVICE_ACCOUNT)
         );
@@ -533,7 +547,7 @@ async function sendLegoForDiary() {
         
         // Add transfer instruction
         console.log('📝 Creating transfer instruction...');
-        const transferInstruction = splToken.createTransferInstruction(
+        const transferInstruction = splTokenLib.createTransferInstruction(
             senderTokenAccount,
             receiverTokenAccount,
             wallet,
