@@ -1,3 +1,4 @@
+console.log('DEBUG: Script starting to load');
 // LEGO Diary Reader v11.0 - SIMPLIFIED: Blockchain + GitHub Only
 console.log('🧱 LEGO Diary Reader v11.0 - Blockchain + GitHub Only');
 console.log('🚀 Script is loading...');
