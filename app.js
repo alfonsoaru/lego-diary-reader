@@ -71,14 +71,21 @@ async function loadDiaryEntries() {
         showStatus('Reading your diary entries from the blockchain...', 'loading');
         diaryEntries.innerHTML = '<div class="loading">🔍 Scanning blockchain for your LEGO diary entries...</div>';
         
-        // Get all transactions for this wallet
-        const signatures = await connection.getSignaturesForAddress(wallet, { limit: 50 });
+        // Get recent transactions for this wallet (reduced to avoid rate limits)
+        const signatures = await connection.getSignaturesForAddress(wallet, { limit: 10 });
         console.log(`Found ${signatures.length} transactions`);
         
         const entries = [];
         
-        // Process transactions to find diary entries
-        for (const signatureInfo of signatures) {
+        // Process transactions to find diary entries (with rate limiting)
+        for (let i = 0; i < signatures.length; i++) {
+            const signatureInfo = signatures[i];
+            
+            // Add delay between requests to avoid rate limiting
+            if (i > 0 && i % 3 === 0) {
+                console.log('⏱️ Pausing to avoid rate limits...');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
             try {
                 const transaction = await connection.getTransaction(signatureInfo.signature, {
                     commitment: 'confirmed',
@@ -109,7 +116,13 @@ async function loadDiaryEntries() {
                 }
                 
             } catch (error) {
-                console.log('Error processing transaction:', error);
+                console.log('Error processing transaction:', error.message);
+                
+                // If we hit rate limits, wait longer and continue
+                if (error.message.includes('429') || error.message.includes('Too many requests')) {
+                    console.log('⏱️ Rate limited, waiting 2 seconds...');
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
             }
         }
         
