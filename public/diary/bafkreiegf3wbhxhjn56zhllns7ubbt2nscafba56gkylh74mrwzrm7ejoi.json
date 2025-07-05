@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \n\nToday, I spent hours sorting through my LEGO collection, and it was like a treasure hunt with every brick I uncovered. As I organized the colorful pieces by color and theme, I felt a wave of inspiration wash over me, sparking ideas for new builds that I can't wait to start! There's something magical about seeing everything laid out—each tiny piece holding the promise of creativity.",
+  "image": {
+    "prompt": "A vibrant and whimsical LEGO scene showcasing a colorful collection of LEGO bricks meticulously sorted by color and theme. The layout features a large, orderly table cluttered with bright LEGO pieces in various hues, including reds, blues, yellows, greens, and more. In the background, a cozy workspace with studio lighting casts a warm glow over the scene, highlighting the textures and colors of the bricks. Scattered on the table are unfinished LEGO builds, tools like a mini tray and a sorting box, and a",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-W9UR16rfQCKtNcVUleaI2ePA.png?st=2025-07-05T13%3A25%3A09Z&se=2025-07-05T15%3A25%3A09Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-04T22%3A10%3A55Z&ske=2025-07-05T22%3A10%3A55Z&sks=b&skv=2024-08-04&sig=WjpDJnUN2sZ1prNClXuO0atj%2BZJXohxgcLhy21qjhss%3D",
+    "ipfsHash": "bafkrein5qdrt4dvpbc3oor4btlabi76t3pnohmn5qdrt4dvpbc3oor4btl",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkrein5qdrt4dvpbc3oor4btlabi76t3pnohmn5qdrt4dvpbc3oor4btl.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T14-25-09-576Z-A-vibrant-and-whimsical-LEGO-scene-showcasing-a-co.png",
+    "timestamp": "2025-07-05T14:25:13.048Z"
+  },
+  "timestamp": "2025-07-05T14:25:13.049Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
