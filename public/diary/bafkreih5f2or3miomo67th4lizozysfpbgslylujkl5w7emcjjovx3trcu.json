@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 2,
+  "totalMessages": 1000000,
+  "content": "October 14, 2023\n\nToday, I finally completed the intricate medieval castle I’ve been working on for weeks. As I placed the final brick, a wave of satisfaction washed over me; all the late-night struggles and adjustments were worth it. It's incredible to see my imagination come to life, and I can’t wait to show it off!",
+  "image": {
+    "prompt": "A detailed scene featuring a vibrant LEGO medieval castle, complete with tall towers, a drawbridge, and colorful banners fluttering in the wind. The castle is intricately designed with various brick textures, stone walls, and decorative elements like a flags adorned with heraldic symbols. In the foreground, a LEGO figure, looking proud and satisfied, is placing the final brick on one of the towers. Surrounding the castle, a well-kept garden with LEGO trees and flowers adds color, while a bright blue",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-DE9KPOYM1LDNAsQw4UzrXSd2.png?st=2025-07-05T10%3A25%3A13Z&se=2025-07-05T12%3A25%3A13Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T08%3A25%3A26Z&ske=2025-07-06T08%3A25%3A26Z&sks=b&skv=2024-08-04&sig=UEbcBkxsRpKXR1K7PyF4HIW9qODAl4e9g2RXSpsvprk%3D",
+    "ipfsHash": "bafkreiuuottkgdoa3ht4g47xwnqhv4j6733vezuuottkgdoa3ht4g47xwn",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreiuuottkgdoa3ht4g47xwnqhv4j6733vezuuottkgdoa3ht4g47xwn.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T11-25-13-080Z-A-detailed-scene-featuring-a-vibrant-LEGO-medieval.png",
+    "timestamp": "2025-07-05T11:25:16.304Z"
+  },
+  "timestamp": "2025-07-05T11:25:16.304Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
