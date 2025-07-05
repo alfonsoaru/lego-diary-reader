@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \n\nToday, as I sat on the floor surrounded by colorful bricks, I felt a deep sense of calm wash over me with every piece I connected. The world outside faded away, and in those quiet moments of building, I found a therapeutic escape where my thoughts could drift freely. It's amazing how a simple act of creation can bring such peace to my mind and heart.  \n\nUntil next time,  \nA Fellow Builder",
+  "image": {
+    "prompt": "A vibrant LEGO scene depicting a cozy indoor setting where a builder sits cross-legged on a colorful, tiled floor made of LEGO bricks. Surrounding them are piles of various brightly colored LEGO pieces, showcasing reds, blues, yellows, and greens. The builder, represented as a LEGO figure with a serene expression, is focused on connecting two LEGO pieces in their hands. Soft studio lighting illuminates the scene, creating a warm, inviting atmosphere. In the background, a partially constructed LEGO creation, resembling a",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-nTgOmpI5z6uYPKvqHibZ1fnl.png?st=2025-07-05T15%3A16%3A05Z&se=2025-07-05T17%3A16%3A05Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-04T20%3A45%3A03Z&ske=2025-07-05T20%3A45%3A03Z&sks=b&skv=2024-08-04&sig=g%2BksBoemai3qrAAHTHs7DZSgy9ORIxMEr9llCWclQHE%3D",
+    "ipfsHash": "bafkreiyaezrigydjahpbcdvlzlzc4bm4xojs3syaezrigydjahpbcdvlzl",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreiyaezrigydjahpbcdvlzlzc4bm4xojs3syaezrigydjahpbcdvlzl.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T16-16-06-081Z-A-vibrant-LEGO-scene-depicting-a-cozy-indoor-setti.png",
+    "timestamp": "2025-07-05T16:16:09.936Z"
+  },
+  "timestamp": "2025-07-05T16:16:09.936Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
