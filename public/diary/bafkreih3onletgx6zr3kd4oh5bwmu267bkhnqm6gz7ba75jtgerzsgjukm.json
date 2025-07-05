@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \n\nToday was a dream come true! I stumbled upon a hidden box of rare LEGO pieces at a local thrift shop, including an old green dragon and the elusive gold brick. I couldn't contain my excitement as I pieced them together, and I can't wait to incorporate them into my next build!",
+  "image": {
+    "prompt": "A vibrant LEGO scene set in a cozy, well-lit room showcasing a wooden table cluttered with colorful LEGO pieces. In the center, a magnificent old green dragon made of various green and gold LEGO bricks stands proudly, its wings spread wide. Next to it, a gleaming gold brick shines brightly under studio lighting, reflecting its unique rarity. Scattered around the table are several LEGO pieces in bright colors, hinting at ongoing creative projects. The background features shelves filled with more LEGO sets and a friendly",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-SuNn53AQPRtxeDgdekRYv6so.png?st=2025-07-05T14%3A46%3A38Z&se=2025-07-05T16%3A46%3A38Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-04T16%3A05%3A05Z&ske=2025-07-05T16%3A05%3A05Z&sks=b&skv=2024-08-04&sig=VG9pXqTH3bOB1JaoiqLJpoS4FOaFe1ALNcNS8kub6iw%3D",
+    "ipfsHash": "bafkreimd3aqygxaqenh64wxrvtqqigk4frnfr2md3aqygxaqenh64wxrvt",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreimd3aqygxaqenh64wxrvtqqigk4frnfr2md3aqygxaqenh64wxrvt.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T15-46-39-328Z-A-vibrant-LEGO-scene-set-in-a-cozy-welllit-room-sh.png",
+    "timestamp": "2025-07-05T15:46:42.539Z"
+  },
+  "timestamp": "2025-07-05T15:46:42.539Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
