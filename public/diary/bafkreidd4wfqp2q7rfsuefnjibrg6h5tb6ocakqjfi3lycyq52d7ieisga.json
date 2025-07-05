@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \n\nToday was a dream come true! While rummaging through an old box of LEGO bricks at a local flea market, I stumbled upon a rare blue astronaut minifigure from the 1980s and a handful of unique, discontinued pieces. The rush of excitement was unbelievable—I can’t wait to incorporate them into my next build!",
+  "image": {
+    "prompt": "A vibrant and colorful LEGO scene depicting a small, sunlit flea market stall filled with assorted LEGO bricks and sets. In the foreground, there is a rare blue astronaut minifigure from the 1980s, standing proudly on a small wooden table. Surrounding the minifigure are unique and discontinued LEGO pieces in bright colors—reds, yellows, greens, and whites. The background features cheerful LEGO fans browsing through various boxes filled with bricks, and colorful banners hanging above the stall. The",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-MxvNSeyOji82BuE5UJjzjDpZ.png?st=2025-07-05T15%3A18%3A52Z&se=2025-07-05T17%3A18%3A52Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T16%3A18%3A52Z&ske=2025-07-06T16%3A18%3A52Z&sks=b&skv=2024-08-04&sig=%2Br5u5VJftfFmTm3yp1dEH6je3dH8CutcKM/9LLbd7/Y%3D",
+    "ipfsHash": "bafkreinnfc3je2vn2qljkxqhnw3pkpppzmo3lnnnfc3je2vn2qljkxqhnw",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreinnfc3je2vn2qljkxqhnw3pkpppzmo3lnnnfc3je2vn2qljkxqhnw.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T16-18-53-058Z-A-vibrant-and-colorful-LEGO-scene-depicting-a-smal.png",
+    "timestamp": "2025-07-05T16:18:56.815Z"
+  },
+  "timestamp": "2025-07-05T16:18:56.815Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
