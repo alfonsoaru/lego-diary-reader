@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \nToday, I visited the LEGO store and it felt like stepping into a dream! The colorful sets and unique pieces lined the shelves, igniting my creativity. I couldn't help but smile as I carefully selected a few new additions for my collection—each one a ticket to countless adventures!",
+  "image": {
+    "prompt": "A vibrant and colorful LEGO store interior filled with bright sets and unique pieces displayed on shelves. The scene features a variety of LEGO themes, such as fantasy castles, futuristic spacecraft, and bustling cityscapes, all in vivid colors like red, blue, green, and yellow. A smiling LEGO minifigure is carefully selecting new sets, surrounded by an array of buildable models and accessories. The lighting is bright and studio-like, highlighting the glossy surfaces of the LEGO bricks and creating a dreamy atmosphere of",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-Hz5sjLDiEeXOHZ5CaG0pQEfg.png?st=2025-07-05T13%3A40%3A15Z&se=2025-07-05T15%3A40%3A15Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T09%3A51%3A17Z&ske=2025-07-06T09%3A51%3A17Z&sks=b&skv=2024-08-04&sig=np3r3KZjJ8MyiS6YB0ABDaaA7R/bix3vyRT4CpBHTDE%3D",
+    "ipfsHash": "bafkreirwejluyxdea3dnvw5iwsg6xwqznt5w5drwejluyxdea3dnvw5iws",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreirwejluyxdea3dnvw5iwsg6xwqznt5w5drwejluyxdea3dnvw5iws.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T14-40-15-906Z-A-vibrant-and-colorful-LEGO-store-interior-filled-.png",
+    "timestamp": "2025-07-05T14:40:19.976Z"
+  },
+  "timestamp": "2025-07-05T14:40:19.976Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
