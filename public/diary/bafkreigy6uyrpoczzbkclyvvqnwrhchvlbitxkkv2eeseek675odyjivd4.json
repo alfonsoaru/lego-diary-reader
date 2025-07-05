@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "Dear Diary,  \n\nToday was an exhilarating day in my LEGO world! I stumbled upon a new building technique that uses offset bricks to create dynamic angles and depth in my structures—it's like a whole new dimension opened up for my creations! I can't wait to experiment with it more tomorrow and see where my imagination takes me!",
+  "image": {
+    "prompt": "A vibrant LEGO scene featuring an imaginative construction site with various colorful LEGO bricks scattered around. The focal point is a unique building structure demonstrating dynamic angles and depth, constructed using offset bricks for added visual interest. Brightly colored bricks in shades of red, blue, yellow, and green are used to create the building, and there are tools and mini LEGO figures enthusiastically working together. The setting includes a sunny background with a clear blue sky and a few fluffy clouds, all illuminated by studio lighting to enhance the",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-3lOgwIGgaqmbbHQCMpaop5b8.png?st=2025-07-05T14%3A11%3A26Z&se=2025-07-05T16%3A11%3A26Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T00%3A30%3A55Z&ske=2025-07-06T00%3A30%3A55Z&sks=b&skv=2024-08-04&sig=Uw2EEhC4upD8oGEEnhlY/vKjeMDXZaeQrDJG6LqsLBA%3D",
+    "ipfsHash": "bafkreipdiquo5golg6cvjc2qs3vlenrawwif25pdiquo5golg6cvjc2qs3",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkreipdiquo5golg6cvjc2qs3vlenrawwif25pdiquo5golg6cvjc2qs3.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T15-11-27-234Z-A-vibrant-LEGO-scene-featuring-an-imaginative-cons.png",
+    "timestamp": "2025-07-05T15:11:30.886Z"
+  },
+  "timestamp": "2025-07-05T15:11:30.886Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
