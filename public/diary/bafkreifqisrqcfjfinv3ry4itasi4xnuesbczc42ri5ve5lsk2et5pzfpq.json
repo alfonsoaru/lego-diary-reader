@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "October 15, 2023\n\nToday was incredible! I finally got to share my love for LEGO with my younger cousin, who was building their first set. Watching their eyes light up as they clicked the bricks together was pure magic, and it felt amazing to pass on my passion—who knows, maybe I've sparked a lifelong LEGO enthusiast!",
+  "image": {
+    "prompt": "A vibrant LEGO scene depicting a cozy living room with a bright, colorful LEGO set being built on a coffee table. In the foreground, a young child with wide, excited eyes is happily clicking LEGO bricks together, while an older cousin looks on with a proud smile. Surrounding them are scattered LEGO pieces in various colors, a completed LEGO model in the background, and warm studio lighting creating a cheerful atmosphere. The walls are adorned with framed LEGO art and a window showing a sunny day outside, emphasizing the",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-czpC64pAWkWuEcX4N36xa3zY.png?st=2025-07-05T14%3A50%3A19Z&se=2025-07-05T16%3A50%3A19Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T15%3A41%3A45Z&ske=2025-07-06T15%3A41%3A45Z&sks=b&skv=2024-08-04&sig=nSjQ%2BQE0%2BSsKQAgD7LZqkQqbrfIxXx4iE6f7VES9jmA%3D",
+    "ipfsHash": "bafkrei2yocm5g6a5jvhrszu6sltxw7zjyanlps2yocm5g6a5jvhrszu6sl",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkrei2yocm5g6a5jvhrszu6sltxw7zjyanlps2yocm5g6a5jvhrszu6sl.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T15-50-19-319Z-A-vibrant-LEGO-scene-depicting-a-cozy-living-room-.png",
+    "timestamp": "2025-07-05T15:50:22.812Z"
+  },
+  "timestamp": "2025-07-05T15:50:22.812Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
