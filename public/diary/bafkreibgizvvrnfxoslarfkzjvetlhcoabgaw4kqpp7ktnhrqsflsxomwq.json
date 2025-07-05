@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1000000,
+  "content": "October 15, 2023\n\nToday was incredible! I stumbled upon a mind-blowing building technique that uses interlocking bricks in a way I never imagined possible. My latest project is coming to life in ways I never thought possible, and I can't wait to share it with my fellow LEGO enthusiasts!",
+  "image": {
+    "prompt": "A vibrant LEGO scene depicting a colorful workshop filled with various LEGO bricks in bright yellow, red, blue, and green. The focal point is a large, intricate model under construction, showcasing unique interlocking building techniques. Surrounding the model are excited LEGO minifigures, one with a tool in hand, examining the innovative design. The background features shelves stacked with organized LEGO bricks and blueprints. Studio lighting highlights the colors and details, creating a cheerful and inspiring atmosphere for creativity and collaboration among LEGO",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-DH1VLMXa63xS3UJ8uVDo4Nxn.png?st=2025-07-05T10%3A24%3A49Z&se=2025-07-05T12%3A24%3A49Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-04T12%3A28%3A48Z&ske=2025-07-05T12%3A28%3A48Z&sks=b&skv=2024-08-04&sig=t0XHv30hGPDbHaQMVhMD/IfSsdbvRHQnncl7OezjfmU%3D",
+    "ipfsHash": "bafkrei66vux5hphciify6vdnxcv4rl5qymriwu66vux5hphciify6vdnxc",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkrei66vux5hphciify6vdnxcv4rl5qymriwu66vux5hphciify6vdnxc.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T11-24-49-338Z-A-vibrant-LEGO-scene-depicting-a-colorful-workshop.png",
+    "timestamp": "2025-07-05T11:24:52.824Z"
+  },
+  "timestamp": "2025-07-05T11:24:52.824Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
