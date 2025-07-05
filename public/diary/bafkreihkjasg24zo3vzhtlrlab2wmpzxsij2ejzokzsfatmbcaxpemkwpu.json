@@ -1,0 +1,20 @@
+{
+  "customerAddress": "ESYwrfbfqRHpF6BiEDPGr7FuwFaMgNMNHUZdEiSei3Yn",
+  "messageNumber": 1,
+  "totalMessages": 1,
+  "content": "October 15, 2023\n\nToday was nothing short of magical! I stumbled upon a hidden box of rare LEGO pieces at a local thrift shop – old castle turrets and unique minifigure heads I’ve been searching for ages! The thrill of adding them to my collection sent my heart racing; I can’t wait to start building something epic with them!",
+  "image": {
+    "prompt": "A vibrant LEGO scene featuring a hidden box overflowing with colorful, rare LEGO pieces, including intricate old castle turrets and unique minifigure heads. The setting is a cozy thrift shop corner filled with shelves of various LEGO sets, showcasing an eclectic mix of colors. Bright LEGO colors dominate the scene, with greens, reds, yellows, and blues creating a cheerful atmosphere. Studio lighting highlights the details of the LEGO pieces and casts a warm glow, emphasizing the excitement and wonder of discovering these treasures. In",
+    "type": "dalle-generated-custom",
+    "data": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-ejL1t0e33J4kvtRsWQiCbLWE/user-pjlW8pGmlnW5sKvWpiI1trhJ/img-eCq5UvLeb8Q1Z8cnju7bJ9jr.png?st=2025-07-05T14%3A37%3A34Z&se=2025-07-05T16%3A37%3A34Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-05T03%3A55%3A58Z&ske=2025-07-06T03%3A55%3A58Z&sks=b&skv=2024-08-04&sig=jXgNusnOudkowb2U0o5C9iExK0chUkIVWxBhHsg2TqI%3D",
+    "ipfsHash": "bafkrei7culpyoox7ssmranxmqlxmunarecziox7culpyoox7ssmranxmql",
+    "ipfsUrl": null,
+    "githubPagesUrl": "https://alfonsoaru.github.io/lego-diary-reader/public/images/bafkrei7culpyoox7ssmranxmqlxmunarecziox7culpyoox7ssmranxmql.png",
+    "localPath": "/home/bodge/projects/nookw3/lego-diary-reader/generated-images/2025-07-05T15-37-35-062Z-A-vibrant-LEGO-scene-featuring-a-hidden-box-overfl.png",
+    "timestamp": "2025-07-05T15:37:38.634Z"
+  },
+  "timestamp": "2025-07-05T15:37:38.634Z",
+  "date": "Saturday, July 5, 2025",
+  "shortAddress": "ESYwrfbf...",
+  "type": "lego-diary-entry-openai"
+}
